@@ -19,8 +19,19 @@ public class FXPlayercontroller {
     private MediaPlayer mediaplayer;
 
     public void play(ActionEvent event) {
-        media = new Media(new File(SONGPATH).toURI().toString());
-        mediaplayer = new MediaPlayer(media);
-        mediaplayer.setAutoPlay(true);
+        if (mediaplayer == null) {
+            media = new Media(new File(SONGPATH).toURI().toString());
+            mediaplayer = new MediaPlayer(media);
+            mediaplayer.setAutoPlay(true);
+            btnPlay.setText("Pause");
+        }
+        else if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
+            mediaplayer.play();
+            btnPlay.setText("Pause");
+        }
+        else if (mediaplayer.getStatus() == MediaPlayer.Status.PLAYING) {
+            mediaplayer.pause();
+            btnPlay.setText("Resume");
+        }
     }
 }
