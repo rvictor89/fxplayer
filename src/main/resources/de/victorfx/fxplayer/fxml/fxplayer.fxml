@@ -16,6 +16,7 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
     </rowConstraints>
    <children>
-      <Button fx:id="btnPlay" mnemonicParsing="false" onAction="#play" text="Play" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+      <Button fx:id="btnPlay" disable="true" mnemonicParsing="false" onAction="#play" text="Play" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER" />
+      <Button fx:id="filechooser" mnemonicParsing="false" onAction="#openfile" text="Open Song" GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.valignment="CENTER" />
    </children>
 </GridPane>

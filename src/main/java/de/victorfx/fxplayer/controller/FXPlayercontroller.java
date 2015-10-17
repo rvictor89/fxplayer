@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.stage.FileChooser;
 
 import java.io.File;
 
@@ -12,15 +13,16 @@ import java.io.File;
  */
 public class FXPlayercontroller {
 
-    public static final String SONGPATH = "D:/Eigene Musik/Test.mp3";
-
     public Button btnPlay;
+    public Button filechooser;
     private Media media;
     private MediaPlayer mediaplayer;
+    private FileChooser fc;
+    private String songpath;
 
     public void play(ActionEvent event) {
         if (mediaplayer == null) {
-            media = new Media(new File(SONGPATH).toURI().toString());
+            media = new Media(new File(songpath).toURI().toString());
             mediaplayer = new MediaPlayer(media);
             mediaplayer.setAutoPlay(true);
             btnPlay.setText("Pause");
@@ -33,5 +35,13 @@ public class FXPlayercontroller {
             mediaplayer.pause();
             btnPlay.setText("Resume");
         }
+    }
+
+    public void openfile(ActionEvent event) {
+        fc = new FileChooser();
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3","*.mp3"));
+        File file = fc.showOpenDialog(null);
+        songpath = file.getAbsolutePath().replace("\\","/");
+        btnPlay.setDisable(false);
     }
 }
