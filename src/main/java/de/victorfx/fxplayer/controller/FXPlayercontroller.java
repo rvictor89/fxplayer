@@ -1,6 +1,7 @@
 package de.victorfx.fxplayer.controller;
 
 import javafx.event.ActionEvent;
+import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
@@ -13,8 +14,10 @@ import java.io.File;
  */
 public class FXPlayercontroller {
 
-    public Button btnPlay;
-    public Button filechooser;
+    @FXML
+    private Button btnPlay;
+    @FXML
+    private Button filechooser;
     private Media media;
     private MediaPlayer mediaplayer;
     private FileChooser fc;
@@ -26,12 +29,10 @@ public class FXPlayercontroller {
             mediaplayer = new MediaPlayer(media);
             mediaplayer.setAutoPlay(true);
             btnPlay.setText("Pause");
-        }
-        else if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
+        } else if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
             mediaplayer.play();
             btnPlay.setText("Pause");
-        }
-        else if (mediaplayer.getStatus() == MediaPlayer.Status.PLAYING) {
+        } else if (mediaplayer.getStatus() == MediaPlayer.Status.PLAYING) {
             mediaplayer.pause();
             btnPlay.setText("Resume");
         }
@@ -39,9 +40,9 @@ public class FXPlayercontroller {
 
     public void openfile(ActionEvent event) {
         fc = new FileChooser();
-        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3","*.mp3"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
         File file = fc.showOpenDialog(null);
-        songpath = file.getAbsolutePath().replace("\\","/");
+        songpath = file.getAbsolutePath().replace("\\", "/");
         btnPlay.setDisable(false);
     }
 }

@@ -17,7 +17,7 @@
                 <configuration>
                     <archive>
                         <manifest>
-                            <mainClass>de.victorfx.fxplayer.FXPlayer</mainClass>
+                            <mainClass>de.victorfx.fxplayer.Main</mainClass>
                         </manifest>
                     </archive>
                 </configuration>
