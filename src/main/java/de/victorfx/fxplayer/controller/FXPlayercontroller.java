@@ -16,6 +16,8 @@ import java.io.File;
 public class FXPlayercontroller {
 
     @FXML
+    private Button btnStop;
+    @FXML
     private Label timelabel;
     @FXML
     private Button btnPlay;
@@ -30,12 +32,17 @@ public class FXPlayercontroller {
             mediaplayer = new MediaPlayer(media);
             mediaplayer.setAutoPlay(true);
             btnPlay.setText("Pause");
+            btnStop.setDisable(false);
         } else if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
             mediaplayer.play();
             btnPlay.setText("Pause");
         } else if (mediaplayer.getStatus() == MediaPlayer.Status.PLAYING) {
             mediaplayer.pause();
             btnPlay.setText("Resume");
+        } else if (mediaplayer.getStatus() == MediaPlayer.Status.STOPPED) {
+            mediaplayer.play();
+            btnPlay.setText("Pause");
+            btnStop.setDisable(false);
         }
     }
 
@@ -43,7 +50,24 @@ public class FXPlayercontroller {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
         File file = fc.showOpenDialog(null);
-        songpath = file.getAbsolutePath().replace("\\", "/");
-        btnPlay.setDisable(false);
+        if (file != null) {
+            if (mediaplayer != null) {
+                mediaplayer.dispose();
+            }
+            mediaplayer = null;
+            media = null;
+            songpath = file.getAbsolutePath().replace("\\", "/");
+            btnPlay.setDisable(false);
+            btnPlay.setText("Play");
+            btnStop.setDisable(true);
+        }
+    }
+
+    public void stop(ActionEvent event) {
+        if (mediaplayer != null) {
+            mediaplayer.stop();
+            btnStop.setDisable(true);
+            btnPlay.setText("Play");
+        }
     }
 }

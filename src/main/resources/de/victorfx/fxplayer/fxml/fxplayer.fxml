@@ -21,6 +21,8 @@
                 GridPane.valignment="CENTER"/>
         <Button mnemonicParsing="false" onAction="#openfile" text="Open Song" GridPane.columnIndex="1"
                 GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
+        <Button fx:id="btnStop" disable="true" mnemonicParsing="false" onAction="#stop" text="Stop"
+                GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER"/>
         <Label fx:id="timelabel" text="-- / --" textAlignment="CENTER" GridPane.columnIndex="1"
                GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
     </children>
