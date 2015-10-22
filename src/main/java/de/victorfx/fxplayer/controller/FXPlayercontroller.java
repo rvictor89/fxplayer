@@ -3,6 +3,7 @@ package de.victorfx.fxplayer.controller;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -15,9 +16,9 @@ import java.io.File;
 public class FXPlayercontroller {
 
     @FXML
-    private Button btnPlay;
+    private Label timelabel;
     @FXML
-    private Button filechooser;
+    private Button btnPlay;
     private Media media;
     private MediaPlayer mediaplayer;
     private FileChooser fc;
