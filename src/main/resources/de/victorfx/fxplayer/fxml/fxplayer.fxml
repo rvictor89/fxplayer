@@ -3,6 +3,7 @@
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.text.Font?>
 <GridPane stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
     <columnConstraints>
@@ -16,14 +17,21 @@
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
-        <Button fx:id="btnPlay" disable="true" mnemonicParsing="false" onAction="#play" text="Play"
-                GridPane.columnIndex="1" GridPane.halignment="CENTER" GridPane.rowIndex="2"
-                GridPane.valignment="CENTER"/>
-        <Button mnemonicParsing="false" onAction="#openfile" text="Open Song" GridPane.columnIndex="1"
-                GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
-        <Button fx:id="btnStop" disable="true" mnemonicParsing="false" onAction="#stop" text="Stop"
+        <Button fx:id="btnPlay" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                mnemonicParsing="false" onAction="#play" text="Play" GridPane.columnIndex="1"
                 GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER"/>
-        <Label fx:id="timelabel" text="-- / --" textAlignment="CENTER" GridPane.columnIndex="1"
-               GridPane.halignment="CENTER" GridPane.rowIndex="1" GridPane.valignment="CENTER"/>
+        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
+                onAction="#openfile" text="Open Song" GridPane.columnIndex="1" GridPane.halignment="CENTER"
+                GridPane.valignment="CENTER"/>
+        <Button fx:id="btnStop" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
+                mnemonicParsing="false" onAction="#stop" text="Stop" GridPane.halignment="CENTER" GridPane.rowIndex="2"
+                GridPane.valignment="CENTER"/>
+        <Label fx:id="timelabel" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
+               maxWidth="1.7976931348623157E308" text="--:-- / --:--" GridPane.columnIndex="2"
+               GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+            <font>
+                <Font size="14.0"/>
+            </font>
+        </Label>
     </children>
 </GridPane>

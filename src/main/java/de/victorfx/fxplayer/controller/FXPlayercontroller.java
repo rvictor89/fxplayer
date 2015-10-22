@@ -1,5 +1,7 @@
 package de.victorfx.fxplayer.controller;
 
+import javafx.beans.InvalidationListener;
+import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
@@ -30,6 +32,15 @@ public class FXPlayercontroller {
         if (mediaplayer == null) {
             media = new Media(new File(songpath).toURI().toString());
             mediaplayer = new MediaPlayer(media);
+            mediaplayer.currentTimeProperty().addListener(new InvalidationListener() {
+                public void invalidated(Observable observable) {
+                    int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
+                    int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
+                    int minutesDuration = (int) mediaplayer.getTotalDuration().toMinutes() % 60;
+                    int secondsDuration = (int) mediaplayer.getTotalDuration().toSeconds() % 60;
+                    timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
+                }
+            });
             mediaplayer.setAutoPlay(true);
             btnPlay.setText("Pause");
             btnStop.setDisable(false);
