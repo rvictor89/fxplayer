@@ -122,21 +122,20 @@ public class FXPlayercontroller {
         public void run() {
             String artist = (String) mediaplayer.getMedia().getMetadata().get("artist");
             String title = (String) mediaplayer.getMedia().getMetadata().get("title");
-            if (artist != null) {
-                lblArtist.setText(artist);
-            }
-            if (title != null) {
-                lblTitle.setText(title);
-            }
+            lblArtist.setText(artist != null ? artist : "NA");
+            lblTitle.setText(title != null ? title : "NA");
+
             int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
             int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
             minutesDuration = (int) mediaplayer.getTotalDuration().toMinutes() % 60;
             secondsDuration = (int) mediaplayer.getTotalDuration().toSeconds() % 60 - 10;
             timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
             sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds() - 10);
+
             mediaplayer.currentTimeProperty().addListener(new timelabelListener());
             sliderTime.valueProperty().addListener(new sliderTimeListener());
             sliderVolume.valueProperty().addListener(new sliderVolumeListener());
+
             sliderTime.setDisable(false);
             mediaplayer.setAutoPlay(true);
             btnPlay.setText("Pause");

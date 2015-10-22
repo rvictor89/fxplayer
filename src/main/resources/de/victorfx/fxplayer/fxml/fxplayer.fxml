@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
+<?import javafx.geometry.*?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
@@ -26,12 +26,24 @@
     <children>
         <Button fx:id="btnPlay" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                 mnemonicParsing="false" onAction="#play" text="Play" GridPane.columnIndex="1"
-                GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER"/>
+                GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets bottom="1.0"/>
+            </GridPane.margin>
+        </Button>
         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                onAction="#openfile" text="Open Song" GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
+                onAction="#openfile" text="Open Song" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets left="1.0" top="1.0"/>
+            </GridPane.margin>
+        </Button>
         <Button fx:id="btnStop" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                 mnemonicParsing="false" onAction="#stop" text="Stop" GridPane.halignment="CENTER" GridPane.rowIndex="4"
-                GridPane.valignment="CENTER"/>
+                GridPane.valignment="CENTER">
+            <GridPane.margin>
+                <Insets bottom="1.0" left="1.0"/>
+            </GridPane.margin>
+        </Button>
         <Label fx:id="timelabel" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
                maxWidth="1.7976931348623157E308" text="--:-- / --:--" GridPane.columnIndex="2"
                GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
