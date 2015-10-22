@@ -20,6 +20,8 @@ import java.io.File;
 public class FXPlayercontroller {
 
     @FXML
+    private Slider sliderVolume;
+    @FXML
     private Slider sliderTime;
     @FXML
     private Button btnStop;
@@ -40,6 +42,7 @@ public class FXPlayercontroller {
             mediaplayer = new MediaPlayer(media);
             mediaplayer.currentTimeProperty().addListener(new timelabelListener());
             sliderTime.valueProperty().addListener(new sliderTimeListener());
+            sliderVolume.valueProperty().addListener(new sliderVolumeListener());
             sliderTime.setDisable(false);
             mediaplayer.setAutoPlay(true);
             btnPlay.setText("Pause");
@@ -99,11 +102,19 @@ public class FXPlayercontroller {
             int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
             int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
             int minutesDuration = (int) mediaplayer.getTotalDuration().toMinutes() % 60;
-            int secondsDuration = (int) mediaplayer.getTotalDuration().toSeconds() % 60;
+            int secondsDuration = (int) mediaplayer.getTotalDuration().toSeconds() % 60 - 10;
             timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
             if (!isSliderPressed) {
-                sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds());
+                sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds() - 10);
                 sliderTime.setValue(mediaplayer.getCurrentTime().toSeconds());
+            }
+        }
+    }
+
+    private class sliderVolumeListener implements InvalidationListener {
+        public void invalidated(Observable observable) {
+            if (sliderVolume.isPressed()) {
+                mediaplayer.setVolume(sliderVolume.getValue());
             }
         }
     }
