@@ -4,39 +4,43 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<GridPane prefHeight="90.0" prefWidth="532.0" stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40"
-          xmlns:fx="http://javafx.com/fxml/1" fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
+<GridPane prefHeight="128.0" prefWidth="532.0" stylesheets="@../css/fxplayer.css"
+          xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+          fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
     <columnConstraints>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="100.0"/>
-        <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="0.0" prefWidth="0.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="99.0" minWidth="10.0" prefWidth="84.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="139.0" minWidth="10.0" prefWidth="60.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="295.0" minWidth="10.0" prefWidth="295.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="104.0" minWidth="0.0" prefWidth="7.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="95.0" minWidth="0.0" prefWidth="30.0"/>
         <ColumnConstraints hgrow="SOMETIMES" maxWidth="25.0" minWidth="10.0" prefWidth="95.0"/>
+        <ColumnConstraints hgrow="SOMETIMES" maxWidth="25.0" minWidth="10.0" prefWidth="100.0"/>
     </columnConstraints>
     <rowConstraints>
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
         <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="13.0" minHeight="7.0" prefHeight="7.0" vgrow="SOMETIMES"/>
+        <RowConstraints maxHeight="29.0" minHeight="10.0" prefHeight="29.0" vgrow="SOMETIMES"/>
     </rowConstraints>
     <children>
         <Button fx:id="btnPlay" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
                 mnemonicParsing="false" onAction="#play" text="Play" GridPane.columnIndex="1"
-                GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER"/>
+                GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER"/>
         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                onAction="#openfile" text="Open Song" GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                GridPane.valignment="CENTER"/>
+                onAction="#openfile" text="Open Song" GridPane.halignment="CENTER" GridPane.valignment="CENTER"/>
         <Button fx:id="btnStop" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
-                mnemonicParsing="false" onAction="#stop" text="Stop" GridPane.halignment="CENTER" GridPane.rowIndex="2"
+                mnemonicParsing="false" onAction="#stop" text="Stop" GridPane.halignment="CENTER" GridPane.rowIndex="4"
                 GridPane.valignment="CENTER"/>
         <Label fx:id="timelabel" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
                maxWidth="1.7976931348623157E308" text="--:-- / --:--" GridPane.columnIndex="2"
-               GridPane.halignment="CENTER" GridPane.rowIndex="2" GridPane.valignment="CENTER">
+               GridPane.halignment="CENTER" GridPane.rowIndex="4" GridPane.valignment="CENTER">
             <font>
                 <Font size="14.0"/>
             </font>
         </Label>
         <Slider fx:id="sliderTime" blockIncrement="1.0" disable="true" nodeOrientation="LEFT_TO_RIGHT" prefHeight="14.0"
-                prefWidth="171.0" GridPane.columnSpan="3" GridPane.rowIndex="1">
+                prefWidth="171.0" GridPane.columnSpan="3" GridPane.rowIndex="2">
             <GridPane.margin>
                 <Insets left="10.0" right="10.0"/>
             </GridPane.margin>
@@ -44,10 +48,24 @@
         <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="3" GridPane.halignment="CENTER"
                    GridPane.rowSpan="2147483647"/>
         <Slider fx:id="sliderVolume" blockIncrement="0.01" max="1.0" orientation="VERTICAL" value="1.0"
-                GridPane.columnIndex="4" GridPane.halignment="LEFT" GridPane.rowSpan="2147483647">
+                GridPane.columnIndex="5" GridPane.halignment="LEFT" GridPane.rowSpan="2147483647">
             <GridPane.margin>
                 <Insets bottom="10.0" top="10.0"/>
             </GridPane.margin>
         </Slider>
+        <Label text="Title: " GridPane.columnIndex="1">
+            <GridPane.margin>
+                <Insets left="10.0"/>
+            </GridPane.margin>
+        </Label>
+        <Label text="Artist:" GridPane.columnIndex="1" GridPane.rowIndex="1">
+            <GridPane.margin>
+                <Insets left="10.0"/>
+            </GridPane.margin>
+        </Label>
+        <Label rotate="-90.0" text="Volume" GridPane.columnIndex="4" GridPane.columnSpan="2147483647"
+               GridPane.rowSpan="2147483647"/>
+        <Label fx:id="lblTitle" text="-" GridPane.columnIndex="2"/>
+        <Label fx:id="lblArtist" text="-" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
     </children>
 </GridPane>

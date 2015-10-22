@@ -20,6 +20,10 @@ import java.io.File;
 public class FXPlayercontroller {
 
     @FXML
+    private Label lblTitle;
+    @FXML
+    private Label lblArtist;
+    @FXML
     private Slider sliderVolume;
     @FXML
     private Slider sliderTime;
@@ -34,20 +38,12 @@ public class FXPlayercontroller {
     private FileChooser fc;
     private String songpath;
     private Boolean isSliderPressed = false;
+    private int minutesDuration;
+    private int secondsDuration;
 
 
     public void play(ActionEvent event) {
-        if (mediaplayer == null) {
-            media = new Media(new File(songpath).toURI().toString());
-            mediaplayer = new MediaPlayer(media);
-            mediaplayer.currentTimeProperty().addListener(new timelabelListener());
-            sliderTime.valueProperty().addListener(new sliderTimeListener());
-            sliderVolume.valueProperty().addListener(new sliderVolumeListener());
-            sliderTime.setDisable(false);
-            mediaplayer.setAutoPlay(true);
-            btnPlay.setText("Pause");
-            btnStop.setDisable(false);
-        } else if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
+        if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
             mediaplayer.play();
             btnPlay.setText("Pause");
         } else if (mediaplayer.getStatus() == MediaPlayer.Status.PLAYING) {
@@ -71,14 +67,20 @@ public class FXPlayercontroller {
             mediaplayer = null;
             media = null;
             songpath = file.getAbsolutePath().replace("\\", "/");
-            btnPlay.setDisable(false);
-            btnPlay.setText("Play");
-            btnStop.setDisable(true);
+            media = new Media(new File(songpath).toURI().toString());
+            mediaplayer = new MediaPlayer(media);
+            mediaplayer.setOnReady(new PreparationWorker());
+            mediaplayer.setOnEndOfMedia(new Runnable() {
+                public void run() {
+                    stop(null);
+                }
+            });
         }
     }
 
     public void stop(ActionEvent event) {
         if (mediaplayer != null) {
+            mediaplayer.seek(new Duration(0.0));
             mediaplayer.stop();
             btnStop.setDisable(true);
             btnPlay.setText("Play");
@@ -101,11 +103,8 @@ public class FXPlayercontroller {
         public void invalidated(Observable observable) {
             int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
             int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
-            int minutesDuration = (int) mediaplayer.getTotalDuration().toMinutes() % 60;
-            int secondsDuration = (int) mediaplayer.getTotalDuration().toSeconds() % 60 - 10;
             timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
             if (!isSliderPressed) {
-                sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds() - 10);
                 sliderTime.setValue(mediaplayer.getCurrentTime().toSeconds());
             }
         }
@@ -119,4 +118,30 @@ public class FXPlayercontroller {
         }
     }
 
+    private class PreparationWorker implements Runnable {
+        public void run() {
+            String artist = (String) mediaplayer.getMedia().getMetadata().get("artist");
+            String title = (String) mediaplayer.getMedia().getMetadata().get("title");
+            if (artist != null) {
+                lblArtist.setText(artist);
+            }
+            if (title != null) {
+                lblTitle.setText(title);
+            }
+            int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
+            int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
+            minutesDuration = (int) mediaplayer.getTotalDuration().toMinutes() % 60;
+            secondsDuration = (int) mediaplayer.getTotalDuration().toSeconds() % 60 - 10;
+            timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
+            sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds() - 10);
+            mediaplayer.currentTimeProperty().addListener(new timelabelListener());
+            sliderTime.valueProperty().addListener(new sliderTimeListener());
+            sliderVolume.valueProperty().addListener(new sliderVolumeListener());
+            sliderTime.setDisable(false);
+            mediaplayer.setAutoPlay(true);
+            btnPlay.setText("Pause");
+            btnPlay.setDisable(false);
+            btnStop.setDisable(false);
+        }
+    }
 }
