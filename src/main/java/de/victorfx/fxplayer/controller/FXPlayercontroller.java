@@ -5,10 +5,8 @@ import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.Slider;
-import javafx.scene.control.Tooltip;
+import javafx.scene.control.*;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -21,6 +19,8 @@ import java.io.File;
  */
 public class FXPlayercontroller {
 
+    @FXML
+    private ListView playlistList;
     @FXML
     private Label lblTitle;
     @FXML
