@@ -3,10 +3,12 @@ package de.victorfx.fxplayer.controller;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
+import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
+import javafx.scene.control.Tooltip;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -83,16 +85,13 @@ public class FXPlayercontroller {
         }
     }
 
-    private class sliderTimeListener implements InvalidationListener {
-        public void invalidated(Observable observable) {
-            if (sliderTime.isPressed()) {
-                isSliderPressed = true;
-                mediaplayer.pause();
-                mediaplayer.seek(new Duration(sliderTime.getValue() * 1000));
-                mediaplayer.play();
-                isSliderPressed = false;
-            }
-        }
+    public void sliderTimePressed(Event event) {
+        isSliderPressed = true;
+    }
+
+    public void sliderTimeReleased(Event event) {
+        mediaplayer.seek(new Duration(sliderTime.getValue() * 1000));
+        isSliderPressed = false;
     }
 
     private class timelabelListener implements InvalidationListener {
@@ -124,12 +123,11 @@ public class FXPlayercontroller {
             int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
             int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
             minutesDuration = (int) mediaplayer.getTotalDuration().toMinutes() % 60;
-            secondsDuration = (int) mediaplayer.getTotalDuration().toSeconds() % 60 - 10;
+            secondsDuration = (int) mediaplayer.getTotalDuration().toSeconds() % 60;
             timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
-            sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds() - 10);
+            sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds());
 
             mediaplayer.currentTimeProperty().addListener(new timelabelListener());
-            sliderTime.valueProperty().addListener(new sliderTimeListener());
             sliderVolume.valueProperty().addListener(new sliderVolumeListener());
 
             sliderTime.setDisable(false);
