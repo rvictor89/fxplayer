@@ -70,11 +70,7 @@ public class FXPlayercontroller {
             media = new Media(new File(songpath).toURI().toString());
             mediaplayer = new MediaPlayer(media);
             mediaplayer.setOnReady(new PreparationWorker());
-            mediaplayer.setOnEndOfMedia(new Runnable() {
-                public void run() {
-                    stop(null);
-                }
-            });
+            mediaplayer.setOnEndOfMedia(() -> stop(null));
         }
     }
 
