@@ -45,7 +45,7 @@ public class FXPlayercontroller {
     private Boolean isSliderPressed = false;
     private int minutesDuration;
     private int secondsDuration;
-    private sliderVolumeListener volumeListener = new sliderVolumeListener();
+    private SliderVolumeListener volumeListener = new SliderVolumeListener();
     private MediaEntity mediaEntity;
 
     public void play(ActionEvent event) {
@@ -76,6 +76,8 @@ public class FXPlayercontroller {
             media = new Media(new File(songpath).toURI().toString());
             mediaEntity = new MediaEntity(media);
             mediaplayer = new MediaPlayer(mediaEntity.getMedia());
+            playlistList.getItems().add(0, mediaEntity);
+            playlistList.getSelectionModel().select(0);
             mediaplayer.setOnReady(new PreparationWorker());
             mediaplayer.setOnEndOfMedia(() -> stop(null));
         }
@@ -99,7 +101,28 @@ public class FXPlayercontroller {
         isSliderPressed = false;
     }
 
-    private class timelabelListener implements InvalidationListener {
+    public void playlistClick(Event event) {
+        if (playlistList.getSelectionModel().getSelectedItem() != null) {
+            if (mediaplayer != null) {
+                mediaplayer.dispose();
+            }
+            mediaplayer = null;
+            media = null;
+            mediaEntity = playlistList.getSelectionModel().getSelectedItem();
+            media = mediaEntity.getMedia();
+            mediaplayer = new MediaPlayer(mediaEntity.getMedia());
+            mediaplayer.setOnReady(new PreparationWorker());
+            mediaplayer.setOnEndOfMedia(() -> stop(null));
+        }
+    }
+
+    public void deleteFromList(ActionEvent actionEvent) {
+        int index = playlistList.getSelectionModel().getSelectedIndex();
+        playlistList.getSelectionModel().select(0);
+        playlistList.getItems().remove(index);
+    }
+
+    private class TimelabelListener implements InvalidationListener {
         public void invalidated(Observable observable) {
             int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
             int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
@@ -110,7 +133,7 @@ public class FXPlayercontroller {
         }
     }
 
-    private class sliderVolumeListener implements InvalidationListener {
+    private class SliderVolumeListener implements InvalidationListener {
         public void invalidated(Observable observable) {
             if (sliderVolume.isPressed()) {
                 mediaplayer.setVolume(sliderVolume.getValue());
@@ -122,8 +145,10 @@ public class FXPlayercontroller {
         public void run() {
             String artist = (String) mediaplayer.getMedia().getMetadata().get("artist");
             String title = (String) mediaplayer.getMedia().getMetadata().get("title");
+            String album = (String) mediaplayer.getMedia().getMetadata().get("album");
             mediaEntity.setTitle(title);
             mediaEntity.setArtist(artist);
+            mediaEntity.setAlbum(album);
             lblArtist.setText(artist != null ? artist : "NA");
             lblTitle.setText(title != null ? title : "NA");
 
@@ -134,11 +159,12 @@ public class FXPlayercontroller {
             timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
             sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds());
 
-            mediaplayer.currentTimeProperty().addListener(new timelabelListener());
+            mediaplayer.currentTimeProperty().addListener(new TimelabelListener());
             sliderVolume.valueProperty().removeListener(volumeListener);
             sliderVolume.valueProperty().addListener(volumeListener);
 
-            playlistList.getItems().add(0, mediaEntity);
+            int index = playlistList.getSelectionModel().getSelectedIndex();
+            playlistList.getItems().set(index, mediaEntity);
 
             sliderTime.setDisable(false);
             mediaplayer.setAutoPlay(true);
@@ -147,4 +173,5 @@ public class FXPlayercontroller {
             btnStop.setDisable(false);
         }
     }
+
 }
