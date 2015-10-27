@@ -79,7 +79,7 @@ public class FXPlayercontroller {
             playlistList.getItems().add(0, mediaEntity);
             playlistList.getSelectionModel().select(0);
             mediaplayer.setOnReady(new PreparationWorker());
-            mediaplayer.setOnEndOfMedia(() -> stop(null));
+            mediaplayer.setOnEndOfMedia(new EndOfFileRunner());
         }
     }
 
@@ -112,7 +112,7 @@ public class FXPlayercontroller {
             media = mediaEntity.getMedia();
             mediaplayer = new MediaPlayer(mediaEntity.getMedia());
             mediaplayer.setOnReady(new PreparationWorker());
-            mediaplayer.setOnEndOfMedia(() -> stop(null));
+            mediaplayer.setOnEndOfMedia(new EndOfFileRunner());
         }
     }
 
@@ -171,6 +171,21 @@ public class FXPlayercontroller {
             btnPlay.setText("Pause");
             btnPlay.setDisable(false);
             btnStop.setDisable(false);
+        }
+    }
+
+    private class EndOfFileRunner implements Runnable {
+        @Override
+        public void run() {
+            int index = playlistList.getSelectionModel().getSelectedIndex();
+            System.out.println(index);
+            System.out.println(playlistList.getItems().size());
+            if (index + 1 == playlistList.getItems().size()) {
+                stop(null);
+            } else {
+                playlistList.getSelectionModel().select(index + 1);
+                playlistClick(null);
+            }
         }
     }
 

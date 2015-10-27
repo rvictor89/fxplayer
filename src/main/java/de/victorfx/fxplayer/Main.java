@@ -18,7 +18,7 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
-        primaryStage.initStyle(StageStyle.UTILITY);
+        primaryStage.initStyle(StageStyle.UNIFIED);
         primaryStage.setResizable(false);
         primaryStage.setTitle("FXPlayer 0.1");
         Parent fxplayer = FXMLLoader.load(getClass().getResource("fxml/fxplayer.fxml"));
