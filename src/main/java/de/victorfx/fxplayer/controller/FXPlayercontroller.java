@@ -75,8 +75,7 @@ public class FXPlayercontroller {
             songpath = file.getAbsolutePath().replace("\\", "/");
             media = new Media(new File(songpath).toURI().toString());
             mediaEntity = new MediaEntity(media);
-            playlistList.getItems().add(0, mediaEntity);
-            mediaplayer = new MediaPlayer(media);
+            mediaplayer = new MediaPlayer(mediaEntity.getMedia());
             mediaplayer.setOnReady(new PreparationWorker());
             mediaplayer.setOnEndOfMedia(() -> stop(null));
         }
@@ -123,6 +122,8 @@ public class FXPlayercontroller {
         public void run() {
             String artist = (String) mediaplayer.getMedia().getMetadata().get("artist");
             String title = (String) mediaplayer.getMedia().getMetadata().get("title");
+            mediaEntity.setTitle(title);
+            mediaEntity.setArtist(artist);
             lblArtist.setText(artist != null ? artist : "NA");
             lblTitle.setText(title != null ? title : "NA");
 
@@ -136,6 +137,8 @@ public class FXPlayercontroller {
             mediaplayer.currentTimeProperty().addListener(new timelabelListener());
             sliderVolume.valueProperty().removeListener(volumeListener);
             sliderVolume.valueProperty().addListener(volumeListener);
+
+            playlistList.getItems().add(0, mediaEntity);
 
             sliderTime.setDisable(false);
             mediaplayer.setAutoPlay(true);
