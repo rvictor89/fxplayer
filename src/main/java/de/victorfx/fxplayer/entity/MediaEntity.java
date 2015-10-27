@@ -1,67 +1,39 @@
 package de.victorfx.fxplayer.entity;
 
+import javafx.scene.media.Media;
+
 /**
  * Created by Ramon Victor on 26.10.2015.
  */
 public class MediaEntity {
 
+    private Media media;
     private String title;
     private String artist;
     private String album;
-    private String pathToFile;
-    private double totalDurationInSeconds;
-    private double totalDurationInMinutes;
 
-    public MediaEntity(String pathToFile) {
-        this.pathToFile = pathToFile;
+    public MediaEntity(Media media) {
+        this.media = media;
     }
 
-    public String getTitle() {
-        return title;
+    public Media getMedia() {
+        return media;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setMedia(Media media) {
+        this.media = media;
+        title = (String) media.getMetadata().get("title");
+        artist = (String) media.getMetadata().get("artist");
+        album = (String) media.getMetadata().get("album");
     }
 
-    public String getArtist() {
-        return artist;
+    @Override
+    public String toString() {
+        return "MediaEntity{" +
+                "media=" + media +
+                ", title='" + title + '\'' +
+                ", artist='" + artist + '\'' +
+                ", album='" + album + '\'' +
+                '}';
     }
-
-    public void setArtist(String artist) {
-        this.artist = artist;
-    }
-
-    public String getAlbum() {
-        return album;
-    }
-
-    public void setAlbum(String album) {
-        this.album = album;
-    }
-
-    public String getPathToFile() {
-        return pathToFile;
-    }
-
-    public void setPathToFile(String pathToFile) {
-        this.pathToFile = pathToFile;
-    }
-
-    public double getTotalDurationInSeconds() {
-        return totalDurationInSeconds;
-    }
-
-    public void setTotalDurationInSeconds(double totalDurationInSeconds) {
-        this.totalDurationInSeconds = totalDurationInSeconds;
-    }
-
-    public double getTotalDurationInMinutes() {
-        return totalDurationInMinutes;
-    }
-
-    public void setTotalDurationInMinutes(double totalDurationInMinutes) {
-        this.totalDurationInMinutes = totalDurationInMinutes;
-    }
-
 }

@@ -1,12 +1,15 @@
 package de.victorfx.fxplayer.controller;
 
+import de.victorfx.fxplayer.entity.MediaEntity;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
 import javafx.event.Event;
 import javafx.fxml.FXML;
-import javafx.scene.control.*;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.control.ListView;
+import javafx.scene.control.Slider;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -20,7 +23,7 @@ import java.io.File;
 public class FXPlayercontroller {
 
     @FXML
-    private ListView playlistList;
+    private ListView<MediaEntity> playlistList;
     @FXML
     private Label lblTitle;
     @FXML
@@ -42,7 +45,8 @@ public class FXPlayercontroller {
     private Boolean isSliderPressed = false;
     private int minutesDuration;
     private int secondsDuration;
-
+    private sliderVolumeListener volumeListener = new sliderVolumeListener();
+    private MediaEntity mediaEntity;
 
     public void play(ActionEvent event) {
         if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
@@ -70,6 +74,8 @@ public class FXPlayercontroller {
             media = null;
             songpath = file.getAbsolutePath().replace("\\", "/");
             media = new Media(new File(songpath).toURI().toString());
+            mediaEntity = new MediaEntity(media);
+            playlistList.getItems().add(0, mediaEntity);
             mediaplayer = new MediaPlayer(media);
             mediaplayer.setOnReady(new PreparationWorker());
             mediaplayer.setOnEndOfMedia(() -> stop(null));
@@ -128,7 +134,8 @@ public class FXPlayercontroller {
             sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds());
 
             mediaplayer.currentTimeProperty().addListener(new timelabelListener());
-            sliderVolume.valueProperty().addListener(new sliderVolumeListener());
+            sliderVolume.valueProperty().removeListener(volumeListener);
+            sliderVolume.valueProperty().addListener(volumeListener);
 
             sliderTime.setDisable(false);
             mediaplayer.setAutoPlay(true);
