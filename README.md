@@ -8,3 +8,4 @@ Aktuelle Änderungen gegenüber MASTER Branch:
 - Aktuelle Position im Song sowie Gesamtzeit werden angezeigt
 - Die Lautstärke des Songs kann geändert werden per Slider
 - Metadaten des Songs werden angezeigt
+- Playlist hinzugefügt: Hinzufügen und Entfernen eines Songs aus dieser
