@@ -1,6 +1,7 @@
 package de.victorfx.fxplayer.controller;
 
 import de.victorfx.fxplayer.entity.MediaEntity;
+import de.victorfx.fxplayer.entity.PlaylistEntity;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.event.ActionEvent;
@@ -15,6 +16,7 @@ import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
 import javafx.util.Duration;
 
+import javax.xml.bind.*;
 import java.io.File;
 
 /**
@@ -47,6 +49,8 @@ public class FXPlayercontroller {
     private int secondsDuration;
     private SliderVolumeListener volumeListener = new SliderVolumeListener();
     private MediaEntity mediaEntity;
+    private File playlistSaveFile = new File("unsavedPlaylist.xml");
+    private PlaylistEntity playlistEntity;
 
     public void play(ActionEvent event) {
         if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
@@ -74,7 +78,7 @@ public class FXPlayercontroller {
             media = null;
             songpath = file.getAbsolutePath().replace("\\", "/");
             media = new Media(new File(songpath).toURI().toString());
-            mediaEntity = new MediaEntity(media);
+            mediaEntity = new MediaEntity(media.getSource());
             mediaplayer = new MediaPlayer(mediaEntity.getMedia());
             playlistList.getItems().add(0, mediaEntity);
             playlistList.getSelectionModel().select(0);
@@ -122,6 +126,24 @@ public class FXPlayercontroller {
         playlistList.getItems().remove(index);
     }
 
+    public void openPlaylist(ActionEvent actionEvent) throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(PlaylistEntity.class);
+        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+        playlistEntity = (PlaylistEntity) unmarshaller.unmarshal(playlistSaveFile);
+        stop(null);
+        if (playlistList.getItems().size() > 0) {
+            playlistList.getSelectionModel().select(0);
+        }
+        playlistList.setItems(playlistEntity.getMediaEntities());
+    }
+
+    public void savePlaylist(ActionEvent actionEvent) throws JAXBException {
+        JAXBContext jaxbContext = JAXBContext.newInstance(PlaylistEntity.class);
+        Marshaller marshaller = jaxbContext.createMarshaller();
+        marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
+        marshaller.marshal(playlistEntity, playlistSaveFile);
+    }
+
     private class TimelabelListener implements InvalidationListener {
         public void invalidated(Observable observable) {
             int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
@@ -146,6 +168,7 @@ public class FXPlayercontroller {
             String artist = (String) mediaplayer.getMedia().getMetadata().get("artist");
             String title = (String) mediaplayer.getMedia().getMetadata().get("title");
             String album = (String) mediaplayer.getMedia().getMetadata().get("album");
+            mediaEntity.setDurationMillis(mediaplayer.getTotalDuration().toMillis());
             mediaEntity.setTitle(title);
             mediaEntity.setArtist(artist);
             mediaEntity.setAlbum(album);
@@ -165,6 +188,14 @@ public class FXPlayercontroller {
 
             int index = playlistList.getSelectionModel().getSelectedIndex();
             playlistList.getItems().set(index, mediaEntity);
+
+            try {
+                playlistEntity = new PlaylistEntity();
+                playlistEntity.setMediaEntities(playlistList.getItems());
+                savePlaylist(null);
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
 
             sliderTime.setDisable(false);
             mediaplayer.setAutoPlay(true);

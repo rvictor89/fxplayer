@@ -8,13 +8,26 @@ import javafx.util.Duration;
  */
 public class MediaEntity {
 
-    private Media media;
+    private String source;
     private String title;
     private String artist;
     private String album;
 
-    public MediaEntity(Media media) {
-        this.media = media;
+    public MediaEntity() {
+    }
+
+    public double getDurationMillis() {
+        return durationMillis;
+    }
+
+    public void setDurationMillis(double durationMillis) {
+        this.durationMillis = durationMillis;
+    }
+
+    private double durationMillis;
+
+    public MediaEntity(String source) {
+        this.source = source;
     }
 
     public String getTitle() {
@@ -42,19 +55,28 @@ public class MediaEntity {
     }
 
     public Media getMedia() {
-        return media;
-    }
-
-    public void setMedia(Media media) {
-        this.media = media;
+        return new Media(source);
     }
 
     @Override
     public String toString() {
-        Duration duration = media.getDuration();
-        int  minutes = (int) duration.toMinutes() % 60;
-        int seconds = (int) duration.toSeconds() % 60;
+        Duration duration = new Duration(durationMillis);
+        int  minutes = 0;
+        int seconds = 0;
+        if (duration != null) {
+            minutes = (int) duration.toMinutes() % 60;
+            seconds = (int) duration.toSeconds() % 60;
+        }
         String niceFormat = String.format("%02d:%02d", minutes, seconds);
         return niceFormat + " | " + title + " - " + artist + " [" + album + "] ";
     }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
 }
