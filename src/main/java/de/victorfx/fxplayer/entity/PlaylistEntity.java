@@ -1,8 +1,7 @@
 package de.victorfx.fxplayer.entity;
 
-import javafx.collections.ObservableList;
-
 import javax.xml.bind.annotation.XmlRootElement;
+import java.util.List;
 
 /**
  * Created by Ramon Victor on 28.10.2015.
@@ -10,14 +9,14 @@ import javax.xml.bind.annotation.XmlRootElement;
 @XmlRootElement(name = "Playlist")
 public class PlaylistEntity {
 
-    private ObservableList<MediaEntity> mediaEntities;
+    private List<MediaEntity> mediaEntityList;
 
-    public ObservableList<MediaEntity> getMediaEntities() {
-        return mediaEntities;
+    public List<MediaEntity> getMediaEntityList() {
+        return mediaEntityList;
     }
 
-    public void setMediaEntities(ObservableList<MediaEntity> mediaEntities) {
-        this.mediaEntities = mediaEntities;
+    public void setMediaEntityList(List<MediaEntity> mediaEntityList) {
+        this.mediaEntityList = mediaEntityList;
     }
 
 }

@@ -12,8 +12,13 @@ public class MediaEntity {
     private String title;
     private String artist;
     private String album;
+    private double durationMillis;
 
     public MediaEntity() {
+    }
+
+    public MediaEntity(String source) {
+        this.source = source;
     }
 
     public double getDurationMillis() {
@@ -22,12 +27,6 @@ public class MediaEntity {
 
     public void setDurationMillis(double durationMillis) {
         this.durationMillis = durationMillis;
-    }
-
-    private double durationMillis;
-
-    public MediaEntity(String source) {
-        this.source = source;
     }
 
     public String getTitle() {
@@ -61,7 +60,7 @@ public class MediaEntity {
     @Override
     public String toString() {
         Duration duration = new Duration(durationMillis);
-        int  minutes = 0;
+        int minutes = 0;
         int seconds = 0;
         if (duration != null) {
             minutes = (int) duration.toMinutes() % 60;
