@@ -4,27 +4,27 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<GridPane prefHeight="301.0" prefWidth="532.0" stylesheets="@../css/fxplayer.css"
-          xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+<GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="301.0" prefWidth="566.0" styleClass="background"
+          stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
     <columnConstraints>
-        <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="84.0"/>
-        <ColumnConstraints hgrow="NEVER" minWidth="10.0" prefWidth="60.0"/>
-        <ColumnConstraints hgrow="ALWAYS" minWidth="10.0" prefWidth="295.0"/>
-        <ColumnConstraints hgrow="NEVER" minWidth="0.0" prefWidth="7.0"/>
-        <ColumnConstraints hgrow="NEVER" minWidth="0.0" prefWidth="30.0"/>
-        <ColumnConstraints hgrow="NEVER" maxWidth="25.0" minWidth="10.0" prefWidth="95.0"/>
-        <ColumnConstraints hgrow="NEVER" maxWidth="25.0" minWidth="10.0" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="100.0"/>
+        <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="80.0"/>
+        <ColumnConstraints hgrow="ALWAYS" minWidth="-Infinity" prefWidth="295.0"/>
+        <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="7.0"/>
+        <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="30.0"/>
+        <ColumnConstraints hgrow="NEVER" maxWidth="25.0" minWidth="-Infinity" prefWidth="95.0"/>
+        <ColumnConstraints hgrow="NEVER" maxWidth="25.0" minWidth="-Infinity" prefWidth="100.0"/>
     </columnConstraints>
     <rowConstraints>
-        <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="20.0" vgrow="NEVER"/>
-        <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="20.0" vgrow="NEVER"/>
-        <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="20.0" vgrow="NEVER"/>
-        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="NEVER"/>
-        <RowConstraints maxHeight="13.0" minHeight="7.0" prefHeight="7.0" vgrow="NEVER"/>
-        <RowConstraints maxHeight="25.0" minHeight="10.0" prefHeight="20.0" vgrow="NEVER"/>
-        <RowConstraints prefHeight="29.0" vgrow="ALWAYS"/>
-        <RowConstraints prefHeight="29.0" vgrow="NEVER"/>
+        <RowConstraints maxHeight="25.0" minHeight="-Infinity" prefHeight="20.0" vgrow="NEVER"/>
+        <RowConstraints maxHeight="25.0" minHeight="-Infinity" prefHeight="20.0" vgrow="NEVER"/>
+        <RowConstraints maxHeight="25.0" minHeight="-Infinity" prefHeight="20.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="-Infinity" prefHeight="30.0" vgrow="NEVER"/>
+        <RowConstraints maxHeight="13.0" minHeight="-Infinity" prefHeight="7.0" vgrow="NEVER"/>
+        <RowConstraints maxHeight="25.0" minHeight="-Infinity" prefHeight="20.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="-Infinity" prefHeight="29.0" vgrow="ALWAYS"/>
+        <RowConstraints minHeight="-Infinity" prefHeight="29.0" vgrow="NEVER"/>
     </rowConstraints>
     <children>
         <Button fx:id="btnPlay" disable="true" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308"
@@ -35,7 +35,7 @@
             </GridPane.margin>
         </Button>
         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                onAction="#openfile" text="Open Song" GridPane.halignment="CENTER" GridPane.valignment="CENTER">
+                onAction="#openfile" text="Open..." GridPane.halignment="CENTER" GridPane.valignment="CENTER">
             <GridPane.margin>
                 <Insets left="1.0" top="1.0"/>
             </GridPane.margin>
@@ -85,7 +85,8 @@
         <Label fx:id="lblArtist" text="-" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
         <Accordion GridPane.columnIndex="2" GridPane.rowIndex="6"/>
         <ListView fx:id="playlistList" onMouseClicked="#playlistClick" prefHeight="78.0" prefWidth="532.0"
-                  GridPane.columnSpan="2147483647" GridPane.rowIndex="6" GridPane.vgrow="ALWAYS"/>
+                  styleClass="table-view" GridPane.columnSpan="2147483647" GridPane.rowIndex="6"
+                  GridPane.vgrow="ALWAYS"/>
         <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0"
               GridPane.columnSpan="2147483647" GridPane.rowIndex="7">
             <children>
