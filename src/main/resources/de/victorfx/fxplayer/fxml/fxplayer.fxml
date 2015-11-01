@@ -4,12 +4,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="301.0" prefWidth="566.0" styleClass="background"
-          stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+<GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="301.0" prefWidth="566.0"
+          styleClass="background" stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40"
           fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
     <columnConstraints>
         <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="100.0"/>
-        <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="80.0"/>
+        <ColumnConstraints hgrow="NEVER" minWidth="-Infinity"/>
         <ColumnConstraints hgrow="ALWAYS" minWidth="-Infinity" prefWidth="295.0"/>
         <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="7.0"/>
         <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="30.0"/>
@@ -90,12 +90,12 @@
         <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0"
               GridPane.columnSpan="2147483647" GridPane.rowIndex="7">
             <children>
-                <Button mnemonicParsing="false" onAction="#savePlaylist" text="Save">
+                <Button mnemonicParsing="false" onAction="#dialogSavePlaylist" text="Save">
                     <HBox.margin>
                         <Insets left="1.0"/>
                     </HBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#openPlaylist" text="Open"/>
+                <Button mnemonicParsing="false" onAction="#dialogOpenPlaylist" text="Open"/>
                 <Separator orientation="VERTICAL" prefHeight="29.0" prefWidth="30.0"/>
                 <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#deleteFromList"
                         text="Delete">

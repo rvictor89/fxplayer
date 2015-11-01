@@ -20,7 +20,7 @@ public class Main extends Application {
     public void start(Stage primaryStage) throws Exception {
         primaryStage.initStyle(StageStyle.UNIFIED);
         primaryStage.setResizable(true);
-        primaryStage.setTitle("FXPlayer 0.1");
+        primaryStage.setTitle("FXPlayer 1.0-SNAPSHOT");
         Parent fxplayer = FXMLLoader.load(getClass().getResource("fxml/fxplayer.fxml"));
         Scene root = new Scene(fxplayer);
         primaryStage.setScene(root);

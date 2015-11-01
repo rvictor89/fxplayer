@@ -58,7 +58,7 @@ public class FXPlayercontroller implements Initializable {
     private int secondsDuration;
     private SliderVolumeListener volumeListener = new SliderVolumeListener();
     private MediaEntity mediaEntity;
-    private File playlistSaveFile = new File("unsavedPlaylist.xml");
+    private File playlistSaveFile = new File("unsavedPlaylist.fxp");
     private PlaylistEntity playlistEntity;
 
     @FXML
@@ -142,21 +142,21 @@ public class FXPlayercontroller implements Initializable {
         playlistList.getItems().remove(index);
     }
 
-    @FXML
-    public void openPlaylist(ActionEvent actionEvent) throws JAXBException {
-        JAXBContext jaxbContext = JAXBContext.newInstance(PlaylistEntity.class);
-        Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
-        playlistEntity = new PlaylistEntity();
-        playlistEntity = (PlaylistEntity) unmarshaller.unmarshal(playlistSaveFile);
-        stop(null);
-        if (playlistList.getItems().size() > 0) {
-            playlistList.getSelectionModel().select(0);
+    private void openPlaylist(ActionEvent actionEvent) throws JAXBException {
+        if (playlistSaveFile != null) {
+            JAXBContext jaxbContext = JAXBContext.newInstance(PlaylistEntity.class);
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            playlistEntity = new PlaylistEntity();
+            playlistEntity = (PlaylistEntity) unmarshaller.unmarshal(playlistSaveFile);
+            stop(null);
+            if (playlistList.getItems().size() > 0) {
+                playlistList.getSelectionModel().select(0);
+            }
+            playlistList.setItems(new ObservableListWrapper<>(playlistEntity.getMediaEntityList()));
         }
-        playlistList.setItems(new ObservableListWrapper<>(playlistEntity.getMediaEntityList()));
     }
 
-    @FXML
-    public void savePlaylist(ActionEvent actionEvent) throws JAXBException {
+    private void savePlaylist(ActionEvent actionEvent) throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(PlaylistEntity.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
@@ -171,6 +171,34 @@ public class FXPlayercontroller implements Initializable {
             } catch (JAXBException e) {
                 //Do nothing
             }
+        }
+    }
+
+    @FXML
+    public void dialogSavePlaylist(ActionEvent actionEvent) throws JAXBException {
+        fc = new FileChooser();
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("FXPlayer Playlist", "*.fxp"));
+        playlistSaveFile = fc.showSaveDialog(null);
+        if (playlistSaveFile != null) {
+            savePlaylist(null);
+        }
+    }
+
+    @FXML
+    public void dialogOpenPlaylist(ActionEvent actionEvent) throws JAXBException {
+        fc = new FileChooser();
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("FXPlayer Playlist", "*.fxp"));
+        playlistSaveFile = fc.showOpenDialog(null);
+        if (playlistSaveFile != null) {
+            JAXBContext jaxbContext = JAXBContext.newInstance(PlaylistEntity.class);
+            Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
+            playlistEntity = new PlaylistEntity();
+            playlistEntity = (PlaylistEntity) unmarshaller.unmarshal(playlistSaveFile);
+            stop(null);
+            if (playlistList.getItems().size() > 0) {
+                playlistList.getSelectionModel().select(0);
+            }
+            playlistList.setItems(new ObservableListWrapper<>(playlistEntity.getMediaEntityList()));
         }
     }
 
@@ -223,6 +251,7 @@ public class FXPlayercontroller implements Initializable {
             try {
                 playlistEntity = new PlaylistEntity();
                 playlistEntity.setMediaEntityList(playlistList.getItems());
+                playlistSaveFile = new File("unsavedPlaylist.fxp");
                 savePlaylist(null);
             } catch (JAXBException e) {
                 e.printStackTrace();
