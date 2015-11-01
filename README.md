@@ -9,3 +9,5 @@ Aktuelle Änderungen gegenüber MASTER Branch:
 - Die Lautstärke des Songs kann geändert werden per Slider
 - Metadaten des Songs werden angezeigt
 - Playlist hinzugefügt: Hinzufügen und Entfernen eines Songs aus dieser
+- Playlists können nun gespeichert und geladen werden per Dialog
+- Die aktuelle Playlist wird zudem automatisch gespeichert und geladen
