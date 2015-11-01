@@ -9,6 +9,8 @@ import javafx.stage.StageStyle;
 
 /**
  * Created by Ramon Victor on 17.10.2015.
+ *
+ * Main class. Sets the primaryStage and loads the scenes.
  */
 public class Main extends Application {
 

@@ -5,8 +5,6 @@ import de.victorfx.fxplayer.entity.MediaEntity;
 import de.victorfx.fxplayer.entity.PlaylistEntity;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.event.ActionEvent;
-import javafx.event.Event;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.Button;
@@ -28,9 +26,11 @@ import java.util.ResourceBundle;
 
 /**
  * Created by Ramon Victor on 17.10.2015.
+ *
+ * Controller for the fxplayer.xml.
  */
 public class FXPlayercontroller implements Initializable {
-
+    private final SliderVolumeListener volumeListener = new SliderVolumeListener();
     @FXML
     private Label lblAlbum;
     @FXML
@@ -52,17 +52,18 @@ public class FXPlayercontroller implements Initializable {
     private Media media;
     private MediaPlayer mediaplayer;
     private FileChooser fc;
-    private String songpath;
     private Boolean isSliderPressed = false;
     private int minutesDuration;
     private int secondsDuration;
-    private SliderVolumeListener volumeListener = new SliderVolumeListener();
     private MediaEntity mediaEntity;
     private File playlistSaveFile = new File("unsavedPlaylist.fxp");
     private PlaylistEntity playlistEntity;
 
+    /**
+     * Method for the "Play" button. Controls the mediaplayer and the "Play" button text.
+     */
     @FXML
-    public void play(ActionEvent event) {
+    public void play() {
         if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
             mediaplayer.play();
             btnPlay.setText("Pause");
@@ -76,8 +77,11 @@ public class FXPlayercontroller implements Initializable {
         }
     }
 
+    /**
+     * Method for the "Open..." button. Opens a dialog to choose a mp3 song, this song is then added to the current playlist and started.
+     */
     @FXML
-    public void openfile(ActionEvent event) {
+    public void openfile() {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
         File file = fc.showOpenDialog(null);
@@ -87,7 +91,7 @@ public class FXPlayercontroller implements Initializable {
             }
             mediaplayer = null;
             media = null;
-            songpath = file.getAbsolutePath().replace("\\", "/");
+            String songpath = file.getAbsolutePath().replace("\\", "/");
             media = new Media(new File(songpath).toURI().toString());
             mediaEntity = new MediaEntity(media.getSource());
             mediaplayer = new MediaPlayer(mediaEntity.getMedia());
@@ -98,8 +102,11 @@ public class FXPlayercontroller implements Initializable {
         }
     }
 
+    /**
+     * Method for the "Stop" button. Stops the mediaplayer and sets the button text.
+     */
     @FXML
-    public void stop(ActionEvent event) {
+    public void stop() {
         if (mediaplayer != null) {
             mediaplayer.seek(new Duration(0.0));
             mediaplayer.stop();
@@ -108,19 +115,28 @@ public class FXPlayercontroller implements Initializable {
         }
     }
 
+    /**
+     * Method for pressing the Timeslider.
+     */
     @FXML
-    public void sliderTimePressed(Event event) {
+    public void sliderTimePressed() {
         isSliderPressed = true;
     }
 
+    /**
+     * Method for releasing the Timeslider. The mediaplayer then seeks to the selected time.
+     */
     @FXML
-    public void sliderTimeReleased(Event event) {
+    public void sliderTimeReleased() {
         mediaplayer.seek(new Duration(sliderTime.getValue() * 1000));
         isSliderPressed = false;
     }
 
+    /**
+     * Method for the "Click" event in the playlist. Plays the selected media.
+     */
     @FXML
-    public void playlistClick(Event event) {
+    public void playlistClick() {
         if (playlistList.getSelectionModel().getSelectedItem() != null) {
             if (mediaplayer != null) {
                 mediaplayer.dispose();
@@ -135,20 +151,28 @@ public class FXPlayercontroller implements Initializable {
         }
     }
 
+    /**
+     * Method for the "Delete" button. Removes the selected media from the current playlist.
+     */
     @FXML
-    public void deleteFromList(ActionEvent actionEvent) {
+    public void deleteFromList() {
         int index = playlistList.getSelectionModel().getSelectedIndex();
         playlistList.getSelectionModel().select(0);
         playlistList.getItems().remove(index);
     }
 
-    private void openPlaylist(ActionEvent actionEvent) throws JAXBException {
+    /**
+     * Intern method for opening a playlist from the file saved in playlistSaveFile instance.
+     *
+     * @throws JAXBException
+     */
+    private void openPlaylist() throws JAXBException {
         if (playlistSaveFile != null) {
             JAXBContext jaxbContext = JAXBContext.newInstance(PlaylistEntity.class);
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             playlistEntity = new PlaylistEntity();
             playlistEntity = (PlaylistEntity) unmarshaller.unmarshal(playlistSaveFile);
-            stop(null);
+            stop();
             if (playlistList.getItems().size() > 0) {
                 playlistList.getSelectionModel().select(0);
             }
@@ -156,36 +180,57 @@ public class FXPlayercontroller implements Initializable {
         }
     }
 
-    private void savePlaylist(ActionEvent actionEvent) throws JAXBException {
+    /**
+     * Intern method for saving a playlist in the file saved in playlistSaveFile instance.
+     *
+     * @throws JAXBException
+     */
+    private void savePlaylist() throws JAXBException {
         JAXBContext jaxbContext = JAXBContext.newInstance(PlaylistEntity.class);
         Marshaller marshaller = jaxbContext.createMarshaller();
         marshaller.setProperty(Marshaller.JAXB_FORMATTED_OUTPUT, true);
         marshaller.marshal(playlistEntity, playlistSaveFile);
     }
 
+    /**
+     * Method for when the controller is initialized.
+     *
+     * @param location  location
+     * @param resources resources
+     */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
         if (playlistSaveFile.canRead()) {
             try {
-                openPlaylist(null);
+                openPlaylist();
             } catch (JAXBException e) {
                 //Do nothing
             }
         }
     }
 
+    /**
+     * Method for the "Save Playlist" button. Opens a dialog for saving the XML like fxp file containing the current playlist.
+     *
+     * @throws JAXBException
+     */
     @FXML
-    public void dialogSavePlaylist(ActionEvent actionEvent) throws JAXBException {
+    public void dialogSavePlaylist() throws JAXBException {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("FXPlayer Playlist", "*.fxp"));
         playlistSaveFile = fc.showSaveDialog(null);
         if (playlistSaveFile != null) {
-            savePlaylist(null);
+            savePlaylist();
         }
     }
 
+    /**
+     * Method for the "Open Playlist" button. Opens a dialog for loading the XML like fxp file containing a playlist.
+     *
+     * @throws JAXBException
+     */
     @FXML
-    public void dialogOpenPlaylist(ActionEvent actionEvent) throws JAXBException {
+    public void dialogOpenPlaylist() throws JAXBException {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("FXPlayer Playlist", "*.fxp"));
         playlistSaveFile = fc.showOpenDialog(null);
@@ -194,7 +239,7 @@ public class FXPlayercontroller implements Initializable {
             Unmarshaller unmarshaller = jaxbContext.createUnmarshaller();
             playlistEntity = new PlaylistEntity();
             playlistEntity = (PlaylistEntity) unmarshaller.unmarshal(playlistSaveFile);
-            stop(null);
+            stop();
             if (playlistList.getItems().size() > 0) {
                 playlistList.getSelectionModel().select(0);
             }
@@ -202,6 +247,9 @@ public class FXPlayercontroller implements Initializable {
         }
     }
 
+    /**
+     * Intern InvalidationListener for the Label showing the current and total time of the media. Updates the label with the current time and the total time of the playing media.
+     */
     private class TimelabelListener implements InvalidationListener {
         public void invalidated(Observable observable) {
             int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
@@ -213,6 +261,9 @@ public class FXPlayercontroller implements Initializable {
         }
     }
 
+    /**
+     * Intern InvalidationListener for the volume slider. Controls the current volume of the playing media.
+     */
     private class SliderVolumeListener implements InvalidationListener {
         public void invalidated(Observable observable) {
             if (sliderVolume.isPressed()) {
@@ -221,6 +272,9 @@ public class FXPlayercontroller implements Initializable {
         }
     }
 
+    /**
+     * Intern Runnable for the mediaplayer.setOnReady method. Controls everything about the mediaplayer, ui and the temporary playlist.
+     */
     private class PreparationWorker implements Runnable {
         public void run() {
             String artist = (String) mediaplayer.getMedia().getMetadata().get("artist");
@@ -252,7 +306,7 @@ public class FXPlayercontroller implements Initializable {
                 playlistEntity = new PlaylistEntity();
                 playlistEntity.setMediaEntityList(playlistList.getItems());
                 playlistSaveFile = new File("unsavedPlaylist.fxp");
-                savePlaylist(null);
+                savePlaylist();
             } catch (JAXBException e) {
                 e.printStackTrace();
             }
@@ -265,14 +319,17 @@ public class FXPlayercontroller implements Initializable {
         }
     }
 
+    /**
+     * Intern Runnable for the mediaplayer.setOnEndOfMedia method. Jumps to the next media or stops when the last media.
+     */
     private class EndOfFileRunner implements Runnable {
         public void run() {
             int index = playlistList.getSelectionModel().getSelectedIndex();
             if (index + 1 == playlistList.getItems().size()) {
-                stop(null);
+                stop();
             } else {
                 playlistList.getSelectionModel().select(index + 1);
-                playlistClick(null);
+                playlistClick();
             }
         }
     }

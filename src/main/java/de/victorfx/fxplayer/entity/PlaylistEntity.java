@@ -5,6 +5,8 @@ import java.util.List;
 
 /**
  * Created by Ramon Victor on 28.10.2015.
+ *
+ * PlaylistEntity containing the current playlist with all MediaEntities.
  */
 @XmlRootElement(name = "Playlist")
 public class PlaylistEntity {

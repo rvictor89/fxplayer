@@ -5,6 +5,8 @@ import javafx.util.Duration;
 
 /**
  * Created by Ramon Victor on 26.10.2015.
+ *
+ * The MediaEntity containing Media attributes for saving into the fxp file.
  */
 public class MediaEntity {
 
@@ -57,6 +59,10 @@ public class MediaEntity {
         return new Media(source);
     }
 
+    /**
+     * Format the returning string to a nice form.
+     * @return formatted String
+     */
     @Override
     public String toString() {
         Duration duration = new Duration(durationMillis);

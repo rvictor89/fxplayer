@@ -4,12 +4,12 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="301.0" prefWidth="566.0"
-          styleClass="background" stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40"
+<GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="301.0" prefWidth="584.0" styleClass="background"
+          stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
     <columnConstraints>
         <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="100.0"/>
-        <ColumnConstraints hgrow="NEVER" minWidth="-Infinity"/>
+        <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="100.0"/>
         <ColumnConstraints hgrow="ALWAYS" minWidth="-Infinity" prefWidth="295.0"/>
         <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="7.0"/>
         <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="30.0"/>
@@ -80,7 +80,11 @@
             </GridPane.margin>
         </Label>
         <Label rotate="-90.0" text="Volume" GridPane.columnIndex="4" GridPane.columnSpan="2147483647"
-               GridPane.rowSpan="6"/>
+               GridPane.rowSpan="6">
+            <GridPane.margin>
+                <Insets/>
+            </GridPane.margin>
+        </Label>
         <Label fx:id="lblTitle" text="-" GridPane.columnIndex="2"/>
         <Label fx:id="lblArtist" text="-" GridPane.columnIndex="2" GridPane.rowIndex="1"/>
         <Accordion GridPane.columnIndex="2" GridPane.rowIndex="6"/>
