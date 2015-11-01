@@ -26,7 +26,7 @@ import java.util.ResourceBundle;
 
 /**
  * Created by Ramon Victor on 17.10.2015.
- *
+ * <p>
  * Controller for the fxplayer.xml.
  */
 public class FXPlayercontroller implements Initializable {
@@ -244,6 +244,30 @@ public class FXPlayercontroller implements Initializable {
                 playlistList.getSelectionModel().select(0);
             }
             playlistList.setItems(new ObservableListWrapper<>(playlistEntity.getMediaEntityList()));
+        }
+    }
+
+    /**
+     * Method for the "Add" button. Adds a new media to the playlist without playing it.
+     */
+    @FXML
+    public void addToList() {
+        fc = new FileChooser();
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
+        File file = fc.showOpenDialog(null);
+        if (file != null) {
+            String songpath = file.getAbsolutePath().replace("\\", "/");
+            media = new Media(new File(songpath).toURI().toString());
+            mediaEntity = new MediaEntity(media.getSource());
+            playlistList.getItems().add(mediaEntity);
+            try {
+                playlistEntity = new PlaylistEntity();
+                playlistEntity.setMediaEntityList(playlistList.getItems());
+                playlistSaveFile = new File("unsavedPlaylist.fxp");
+                savePlaylist();
+            } catch (JAXBException e) {
+                e.printStackTrace();
+            }
         }
     }
 
