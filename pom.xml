@@ -32,7 +32,56 @@
                     <target>1.8</target>
                 </configuration>
             </plugin>
+            <plugin>
+                <groupId>com.zenjava</groupId>
+                <artifactId>javafx-maven-plugin</artifactId>
+                <version>8.1.4</version>
+                <configuration>
+                    <mainClass>de.victorfx.fxplayer.Main</mainClass>
+                    <appName>FXPlayer</appName>
+                    <needShortcut>true</needShortcut>
+                    <needMenu>false</needMenu>
+                </configuration>
+                <executions>
+                    <execution>
+                        <!-- required before build-native -->
+                        <id>create-jfxjar</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build-jar</goal>
+                        </goals>
+                    </execution>
+                    <execution>
+                        <id>create-native</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>build-native</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
         </plugins>
     </build>
+
+    <name>FXPlayer</name>
+    <description>Simpler Audio Player geschrieben in JavaFX8</description>
+    <url>https://github.com/rvictor89/fxplayer</url>
+    <inceptionYear>2015</inceptionYear>
+    <licenses>
+        <license>
+            <name>GNU GENERAL PUBLIC LICENSE Version 2</name>
+            <url>http://fsf.org/</url>
+        </license>
+    </licenses>
+    <organization>
+        <name>VictorFX</name>
+    </organization>
+    <developers>
+        <developer>
+            <name>Ramon Victor</name>
+            <url>https://github.com/rvictor89</url>
+        </developer>
+    </developers>
+    <contributors/>
 
 </project>
