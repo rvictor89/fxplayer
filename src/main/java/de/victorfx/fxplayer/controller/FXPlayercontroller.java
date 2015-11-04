@@ -30,7 +30,7 @@ import java.util.ResourceBundle;
  * Controller for the fxplayer.xml.
  */
 public class FXPlayercontroller implements Initializable {
-    private final SliderVolumeListener volumeListener = new SliderVolumeListener();
+
     @FXML
     private Label lblAlbum;
     @FXML
@@ -56,14 +56,16 @@ public class FXPlayercontroller implements Initializable {
     private int minutesDuration;
     private int secondsDuration;
     private MediaEntity mediaEntity;
-    private File playlistSaveFile = new File("unsavedPlaylist.fxp");
+    private File playlistSaveFile;
     private PlaylistEntity playlistEntity;
+    private SliderVolumeListener volumeListener;
+    private double volume;
 
     /**
      * Method for the "Play" button. Controls the mediaplayer and the "Play" button text.
      */
     @FXML
-    public void play() {
+    private void play() {
         if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
             mediaplayer.play();
             btnPlay.setText("Pause");
@@ -81,7 +83,7 @@ public class FXPlayercontroller implements Initializable {
      * Method for the "Open..." button. Opens a dialog to choose a mp3 song, this song is then added to the current playlist and started.
      */
     @FXML
-    public void openfile() {
+    private void openfile() {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
         File file = fc.showOpenDialog(null);
@@ -106,7 +108,7 @@ public class FXPlayercontroller implements Initializable {
      * Method for the "Stop" button. Stops the mediaplayer and sets the button text.
      */
     @FXML
-    public void stop() {
+    private void stop() {
         if (mediaplayer != null) {
             mediaplayer.seek(new Duration(0.0));
             mediaplayer.stop();
@@ -119,7 +121,7 @@ public class FXPlayercontroller implements Initializable {
      * Method for pressing the Timeslider.
      */
     @FXML
-    public void sliderTimePressed() {
+    private void sliderTimePressed() {
         isSliderPressed = true;
     }
 
@@ -127,7 +129,7 @@ public class FXPlayercontroller implements Initializable {
      * Method for releasing the Timeslider. The mediaplayer then seeks to the selected time.
      */
     @FXML
-    public void sliderTimeReleased() {
+    private void sliderTimeReleased() {
         mediaplayer.seek(new Duration(sliderTime.getValue() * 1000));
         isSliderPressed = false;
     }
@@ -136,7 +138,7 @@ public class FXPlayercontroller implements Initializable {
      * Method for the "Click" event in the playlist. Plays the selected media.
      */
     @FXML
-    public void playlistClick() {
+    private void playlistClick() {
         if (playlistList.getSelectionModel().getSelectedItem() != null) {
             if (mediaplayer != null) {
                 mediaplayer.dispose();
@@ -155,7 +157,7 @@ public class FXPlayercontroller implements Initializable {
      * Method for the "Delete" button. Removes the selected media from the current playlist.
      */
     @FXML
-    public void deleteFromList() {
+    private void deleteFromList() {
         int index = playlistList.getSelectionModel().getSelectedIndex();
         playlistList.getSelectionModel().select(0);
         playlistList.getItems().remove(index);
@@ -200,6 +202,11 @@ public class FXPlayercontroller implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        volumeListener = new SliderVolumeListener();
+        playlistSaveFile = new File("unsavedPlaylist.fxp");
+        volume = 1.0;
+
         if (playlistSaveFile.canRead()) {
             try {
                 openPlaylist();
@@ -215,7 +222,7 @@ public class FXPlayercontroller implements Initializable {
      * @throws JAXBException
      */
     @FXML
-    public void dialogSavePlaylist() throws JAXBException {
+    private void dialogSavePlaylist() throws JAXBException {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("FXPlayer Playlist", "*.fxp"));
         playlistSaveFile = fc.showSaveDialog(null);
@@ -230,7 +237,7 @@ public class FXPlayercontroller implements Initializable {
      * @throws JAXBException
      */
     @FXML
-    public void dialogOpenPlaylist() throws JAXBException {
+    private void dialogOpenPlaylist() throws JAXBException {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("FXPlayer Playlist", "*.fxp"));
         playlistSaveFile = fc.showOpenDialog(null);
@@ -251,7 +258,7 @@ public class FXPlayercontroller implements Initializable {
      * Method for the "Add" button. Adds a new media to the playlist without playing it.
      */
     @FXML
-    public void addToList() {
+    private void addToList() {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
         File file = fc.showOpenDialog(null);
@@ -291,7 +298,8 @@ public class FXPlayercontroller implements Initializable {
     private class SliderVolumeListener implements InvalidationListener {
         public void invalidated(Observable observable) {
             if (sliderVolume.isPressed()) {
-                mediaplayer.setVolume(sliderVolume.getValue());
+                volume = sliderVolume.getValue();
+                mediaplayer.setVolume(volume);
             }
         }
     }
@@ -336,6 +344,7 @@ public class FXPlayercontroller implements Initializable {
             }
 
             sliderTime.setDisable(false);
+            mediaplayer.setVolume(volume);
             mediaplayer.setAutoPlay(true);
             btnPlay.setText("Pause");
             btnPlay.setDisable(false);
