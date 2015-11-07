@@ -22,6 +22,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.net.URL;
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -261,12 +262,14 @@ public class FXPlayercontroller implements Initializable {
     private void addToList() {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
-        File file = fc.showOpenDialog(null);
-        if (file != null) {
-            String songpath = file.getAbsolutePath().replace("\\", "/");
-            media = new Media(new File(songpath).toURI().toString());
-            mediaEntity = new MediaEntity(media.getSource());
-            playlistList.getItems().add(mediaEntity);
+        List<File> file = fc.showOpenMultipleDialog(null);
+        if (file != null && file.size() != 0) {
+            for (File tmpFile : file) {
+                String songpath = tmpFile.getAbsolutePath().replace("\\", "/");
+                media = new Media(new File(songpath).toURI().toString());
+                mediaEntity = new MediaEntity(media.getSource());
+                playlistList.getItems().add(mediaEntity);
+            }
             try {
                 playlistEntity = new PlaylistEntity();
                 playlistEntity.setMediaEntityList(playlistList.getItems());
