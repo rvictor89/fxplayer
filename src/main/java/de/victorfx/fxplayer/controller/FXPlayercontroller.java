@@ -57,9 +57,13 @@ public class FXPlayercontroller implements Initializable {
     private int minutesDuration;
     private int secondsDuration;
     private MediaEntity mediaEntity;
+    private MediaEntity playingMediaEntity;
     private File playlistSaveFile;
     private PlaylistEntity playlistEntity;
     private SliderVolumeListener volumeListener;
+    private int playingIndex;
+    private int clickIndex;
+    private short clickCount;
     private double volume;
 
     /**
@@ -89,19 +93,14 @@ public class FXPlayercontroller implements Initializable {
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
         File file = fc.showOpenDialog(null);
         if (file != null) {
-            if (mediaplayer != null) {
-                mediaplayer.dispose();
-            }
-            mediaplayer = null;
-            media = null;
+
             String songpath = file.getAbsolutePath().replace("\\", "/");
             media = new Media(new File(songpath).toURI().toString());
             mediaEntity = new MediaEntity(media.getSource());
-            mediaplayer = new MediaPlayer(mediaEntity.getMedia());
             playlistList.getItems().add(0, mediaEntity);
+            playingIndex = 0;
             playlistList.getSelectionModel().select(0);
-            mediaplayer.setOnReady(new PreparationWorker());
-            mediaplayer.setOnEndOfMedia(new EndOfFileRunner());
+            playMediaAtIndex(0);
         }
     }
 
@@ -140,18 +139,37 @@ public class FXPlayercontroller implements Initializable {
      */
     @FXML
     private void playlistClick() {
-        if (playlistList.getSelectionModel().getSelectedItem() != null) {
-            if (mediaplayer != null) {
-                mediaplayer.dispose();
-            }
-            mediaplayer = null;
-            media = null;
-            mediaEntity = playlistList.getSelectionModel().getSelectedItem();
-            media = mediaEntity.getMedia();
-            mediaplayer = new MediaPlayer(mediaEntity.getMedia());
-            mediaplayer.setOnReady(new PreparationWorker());
-            mediaplayer.setOnEndOfMedia(new EndOfFileRunner());
+        if (clickIndex != playlistList.getSelectionModel().getSelectedIndex()) {
+            clickIndex = playlistList.getSelectionModel().getSelectedIndex();
+            clickCount = 1;
+        } else if (clickCount < 2) {
+            ++clickCount;
         }
+        if (clickCount == 2) {
+            if (playlistList.getSelectionModel().getSelectedItem() != null) {
+                playMediaAtIndex(clickIndex);
+                clickCount = 0;
+            }
+        }
+    }
+
+    /**
+     * Plays the media object at a specific index.
+     *
+     * @param index the specific index
+     */
+    private void playMediaAtIndex(int index) {
+        if (mediaplayer != null) {
+            mediaplayer.dispose();
+        }
+        mediaplayer = null;
+        media = null;
+        mediaEntity = playlistList.getItems().get(index);
+        media = mediaEntity.getMedia();
+        mediaplayer = new MediaPlayer(mediaEntity.getMedia());
+        mediaplayer.setOnReady(new PreparationWorker());
+        mediaplayer.setOnEndOfMedia(new EndOfFileRunner());
+        playingIndex = index;
     }
 
     /**
@@ -162,6 +180,14 @@ public class FXPlayercontroller implements Initializable {
         int index = playlistList.getSelectionModel().getSelectedIndex();
         playlistList.getSelectionModel().select(0);
         playlistList.getItems().remove(index);
+        try {
+            playlistEntity = new PlaylistEntity();
+            playlistEntity.setMediaEntityList(playlistList.getItems());
+            playlistSaveFile = new File("unsavedPlaylist.fxp");
+            savePlaylist();
+        } catch (JAXBException e) {
+            e.printStackTrace();
+        }
     }
 
     /**
@@ -178,8 +204,11 @@ public class FXPlayercontroller implements Initializable {
             stop();
             if (playlistList.getItems().size() > 0) {
                 playlistList.getSelectionModel().select(0);
+                playingIndex = 0;
             }
-            playlistList.setItems(new ObservableListWrapper<>(playlistEntity.getMediaEntityList()));
+            if (playlistEntity != null && playlistEntity.getMediaEntityList() != null) {
+                playlistList.setItems(new ObservableListWrapper<>(playlistEntity.getMediaEntityList()));
+            }
         }
     }
 
@@ -207,6 +236,8 @@ public class FXPlayercontroller implements Initializable {
         volumeListener = new SliderVolumeListener();
         playlistSaveFile = new File("unsavedPlaylist.fxp");
         volume = 1.0;
+        clickCount = 0;
+        clickIndex = 0;
 
         if (playlistSaveFile.canRead()) {
             try {
@@ -250,6 +281,7 @@ public class FXPlayercontroller implements Initializable {
             stop();
             if (playlistList.getItems().size() > 0) {
                 playlistList.getSelectionModel().select(0);
+                playingIndex = 0;
             }
             playlistList.setItems(new ObservableListWrapper<>(playlistEntity.getMediaEntityList()));
         }
@@ -334,8 +366,7 @@ public class FXPlayercontroller implements Initializable {
             sliderVolume.valueProperty().removeListener(volumeListener);
             sliderVolume.valueProperty().addListener(volumeListener);
 
-            int index = playlistList.getSelectionModel().getSelectedIndex();
-            playlistList.getItems().set(index, mediaEntity);
+            playlistList.getItems().set(playingIndex, mediaEntity);
 
             try {
                 playlistEntity = new PlaylistEntity();
@@ -349,6 +380,7 @@ public class FXPlayercontroller implements Initializable {
             sliderTime.setDisable(false);
             mediaplayer.setVolume(volume);
             mediaplayer.setAutoPlay(true);
+            playingMediaEntity = mediaEntity;
             btnPlay.setText("Pause");
             btnPlay.setDisable(false);
             btnStop.setDisable(false);
@@ -360,12 +392,11 @@ public class FXPlayercontroller implements Initializable {
      */
     private class EndOfFileRunner implements Runnable {
         public void run() {
-            int index = playlistList.getSelectionModel().getSelectedIndex();
-            if (index + 1 == playlistList.getItems().size()) {
+            playingIndex = playlistList.getItems().indexOf(playingMediaEntity);
+            if (playingIndex + 1 >= playlistList.getItems().size()) {
                 stop();
             } else {
-                playlistList.getSelectionModel().select(index + 1);
-                playlistClick();
+                playMediaAtIndex(++playingIndex);
             }
         }
     }
