@@ -316,9 +316,9 @@ public class FXPlayercontroller implements Initializable {
             mediaEntity.setTitle(title);
             mediaEntity.setArtist(artist);
             mediaEntity.setAlbum(album);
-            lblArtist.setText(artist != null ? artist : "NA");
-            lblTitle.setText(title != null ? title : "NA");
-            lblAlbum.setText(album != null ? album : "NA");
+            lblArtist.setText(artist != null ? artist : "");
+            lblTitle.setText(title != null ? title : "");
+            lblAlbum.setText(album != null ? album : "");
 
             int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
             int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;

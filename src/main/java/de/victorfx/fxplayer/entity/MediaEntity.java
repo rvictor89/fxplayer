@@ -3,6 +3,8 @@ package de.victorfx.fxplayer.entity;
 import javafx.scene.media.Media;
 import javafx.util.Duration;
 
+import java.io.File;
+
 /**
  * Created by Ramon Victor on 26.10.2015.
  *
@@ -68,12 +70,19 @@ public class MediaEntity {
         Duration duration = new Duration(durationMillis);
         int minutes = 0;
         int seconds = 0;
+        String tmpTitle = title;
+        String tmpArtist = artist != null ? artist : "";
+        String tmpAlbum = album != null ? album : "";
+        if (title == null) {
+            tmpTitle = new File(source).getName();
+            tmpTitle = tmpTitle.replace("%20", " ");
+        }
         if (duration != null) {
             minutes = (int) duration.toMinutes() % 60;
             seconds = (int) duration.toSeconds() % 60;
         }
         String niceFormat = String.format("%02d:%02d", minutes, seconds);
-        return niceFormat + " | " + title + " - " + artist + " [" + album + "] ";
+        return niceFormat + " | " + tmpTitle + " - " + tmpArtist + " [" + tmpAlbum + "] ";
     }
 
     public String getSource() {
