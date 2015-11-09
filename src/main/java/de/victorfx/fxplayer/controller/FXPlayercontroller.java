@@ -22,6 +22,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.net.URL;
+import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
 
@@ -32,6 +33,7 @@ import java.util.ResourceBundle;
  */
 public class FXPlayercontroller implements Initializable {
 
+    public static final int DOUBLECLICKTIME = 500;
     @FXML
     private Label lblAlbum;
     @FXML
@@ -63,7 +65,7 @@ public class FXPlayercontroller implements Initializable {
     private SliderVolumeListener volumeListener;
     private int playingIndex;
     private int clickIndex;
-    private short clickCount;
+    private long clickTimestamp;
     private double volume;
 
     /**
@@ -141,15 +143,13 @@ public class FXPlayercontroller implements Initializable {
     private void playlistClick() {
         if (clickIndex != playlistList.getSelectionModel().getSelectedIndex()) {
             clickIndex = playlistList.getSelectionModel().getSelectedIndex();
-            clickCount = 1;
-        } else if (clickCount < 2) {
-            ++clickCount;
-        }
-        if (clickCount == 2) {
+            clickTimestamp = new Date().getTime();
+        } else if (new Date().getTime() - clickTimestamp <= DOUBLECLICKTIME) {
             if (playlistList.getSelectionModel().getSelectedItem() != null) {
                 playMediaAtIndex(clickIndex);
-                clickCount = 0;
             }
+        } else {
+            clickTimestamp = new Date().getTime();
         }
     }
 
@@ -236,8 +236,8 @@ public class FXPlayercontroller implements Initializable {
         volumeListener = new SliderVolumeListener();
         playlistSaveFile = new File("unsavedPlaylist.fxp");
         volume = 1.0;
-        clickCount = 0;
         clickIndex = 0;
+        clickTimestamp = new Date().getTime();
 
         if (playlistSaveFile.canRead()) {
             try {
