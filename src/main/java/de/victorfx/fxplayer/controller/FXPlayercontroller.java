@@ -36,6 +36,8 @@ public class FXPlayercontroller implements Initializable {
     public static final int DOUBLECLICKTIME = 500;
 
     @FXML
+    private Label lblVolume;
+    @FXML
     private Button btnNext;
     @FXML
     private Button btnBefore;
@@ -238,6 +240,7 @@ public class FXPlayercontroller implements Initializable {
         volumeListener = new SliderVolumeListener();
         playlistSaveFile = new File("unsavedPlaylist.fxp");
         volume = 1.0;
+        lblVolume.setText(String.format("%02d %%", (int) (volume * 100)));
         clickIndex = 0;
         clickTimestamp = new Date().getTime();
 
@@ -368,6 +371,7 @@ public class FXPlayercontroller implements Initializable {
         public void invalidated(Observable observable) {
             if (sliderVolume.isPressed()) {
                 volume = sliderVolume.getValue();
+                lblVolume.setText(String.format("%02d %%", (int) (volume * 100)));
                 mediaplayer.setVolume(volume);
             }
         }

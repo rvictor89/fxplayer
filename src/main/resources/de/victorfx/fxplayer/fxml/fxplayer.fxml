@@ -42,9 +42,9 @@
             </GridPane.margin>
         </Slider>
         <Separator orientation="VERTICAL" prefHeight="200.0" GridPane.columnIndex="4" GridPane.halignment="CENTER" GridPane.rowSpan="6" />
-        <Slider fx:id="sliderVolume" blockIncrement="0.01" max="1.0" orientation="VERTICAL" value="1.0" GridPane.columnIndex="6" GridPane.halignment="LEFT" GridPane.rowSpan="6">
+        <Slider fx:id="sliderVolume" blockIncrement="0.01" max="1.0" orientation="VERTICAL" value="1.0" GridPane.columnIndex="6" GridPane.halignment="CENTER" GridPane.rowSpan="5">
             <GridPane.margin>
-                <Insets bottom="10.0" top="10.0" />
+                <Insets top="10.0" />
             </GridPane.margin>
         </Slider>
         <Label text="Title: " GridPane.columnIndex="2">
@@ -57,9 +57,9 @@
                 <Insets left="10.0" />
             </GridPane.margin>
         </Label>
-        <Label rotate="-90.0" text="Volume" GridPane.columnIndex="5" GridPane.columnSpan="2147483647" GridPane.rowSpan="6">
+        <Label rotate="-90.0" text="Volume" GridPane.columnIndex="5" GridPane.columnSpan="2147483647" GridPane.rowSpan="5">
             <GridPane.margin>
-                <Insets />
+                <Insets top="10.0" />
             </GridPane.margin>
         </Label>
         <Label fx:id="lblTitle" text="-" GridPane.columnIndex="3" />
@@ -112,5 +112,6 @@
             <Insets bottom="10.0" />
          </padding>
       </Separator>
+      <Label fx:id="lblVolume" alignment="CENTER" contentDisplay="CENTER" text="- %" GridPane.columnIndex="5" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.vgrow="NEVER" />
     </children>
 </GridPane>
