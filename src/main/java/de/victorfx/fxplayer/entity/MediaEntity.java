@@ -34,7 +34,13 @@ public class MediaEntity {
     }
 
     public String getTitle() {
-        return title;
+        if (title == null || " ".equals(title)) {
+            String tmpTitle = new File(source).getName();
+            tmpTitle = tmpTitle.replace("%20", " ");
+            return tmpTitle;
+        } else {
+            return title;
+        }
     }
 
     public void setTitle(String title) {
@@ -70,13 +76,9 @@ public class MediaEntity {
         Duration duration = new Duration(durationMillis);
         int minutes = 0;
         int seconds = 0;
-        String tmpTitle = title;
+        String tmpTitle = getTitle();
         String tmpArtist = artist != null ? artist : "";
         String tmpAlbum = album != null ? album : "";
-        if (title == null) {
-            tmpTitle = new File(source).getName();
-            tmpTitle = tmpTitle.replace("%20", " ");
-        }
         if (duration != null) {
             minutes = (int) duration.toMinutes() % 60;
             seconds = (int) duration.toSeconds() % 60;
