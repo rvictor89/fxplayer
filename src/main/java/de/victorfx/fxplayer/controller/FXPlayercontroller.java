@@ -102,11 +102,11 @@ public class FXPlayercontroller implements Initializable {
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
         File file = fc.showOpenDialog(null);
         if (file != null) {
-
             String songpath = file.getAbsolutePath().replace("\\", "/");
             media = new Media(new File(songpath).toURI().toString());
             mediaEntity = new MediaEntity(media.getSource());
             playlistList.getItems().add(0, mediaEntity);
+            generateMediaMetadata(mediaEntity);
             playlistList.getSelectionModel().select(0);
             playMediaAtIndex(0);
         }
@@ -305,6 +305,7 @@ public class FXPlayercontroller implements Initializable {
                 media = new Media(new File(songpath).toURI().toString());
                 mediaEntity = new MediaEntity(media.getSource());
                 playlistList.getItems().add(mediaEntity);
+                generateMediaMetadata(mediaEntity);
             }
             try {
                 playlistEntity = new PlaylistEntity();
@@ -348,6 +349,28 @@ public class FXPlayercontroller implements Initializable {
      */
     private int getPlayingIndex() {
         return playlistList.getItems().indexOf(playingMediaEntity);
+    }
+
+    /**
+     * Get the index of an specific mediaEntity.
+     *
+     * @param mediaEntity the specific mediaEntity.
+     * @return index of the specific mediaEntity.
+     */
+    private int getIndexOfMediaInPlaylist(MediaEntity mediaEntity) {
+        return playlistList.getItems().indexOf(mediaEntity);
+    }
+
+    /**
+     * Generates the Metadata for a specific mediaEntity.
+     *
+     * @param mediaEntity the specific mediaEntity.
+     */
+    private void generateMediaMetadata(MediaEntity mediaEntity) {
+        if (playlistList.getItems().contains(mediaEntity)) {
+            MediaPlayer mediaplayer = new MediaPlayer(mediaEntity.getMedia());
+            mediaplayer.setOnReady(new MetadataWorker(mediaEntity, mediaplayer));
+        }
     }
 
     /**
@@ -437,6 +460,44 @@ public class FXPlayercontroller implements Initializable {
             } else {
                 playMediaAtIndex(getPlayingIndex() + 1);
             }
+        }
+    }
+
+    /**
+     * Intern Runnable for the generateMediaMetadata method.
+     */
+    private class MetadataWorker implements Runnable {
+        MediaEntity mediaEntity;
+        MediaPlayer mediaPlayer;
+
+        public MetadataWorker(MediaEntity mediaEntity, MediaPlayer mediaPlayer) {
+            this.mediaEntity = mediaEntity;
+            this.mediaPlayer = mediaPlayer;
+        }
+
+        public void run() {
+            String artist = (String) mediaPlayer.getMedia().getMetadata().get("artist");
+            String title = (String) mediaPlayer.getMedia().getMetadata().get("title");
+            String album = (String) mediaPlayer.getMedia().getMetadata().get("album");
+            mediaEntity.setDurationMillis(mediaPlayer.getTotalDuration().toMillis());
+            mediaEntity.setTitle(title);
+            mediaEntity.setArtist(artist);
+            mediaEntity.setAlbum(album);
+
+            if (playlistList.getItems().contains(mediaEntity)) {
+                int indexOfMediaInPlaylist = getIndexOfMediaInPlaylist(mediaEntity);
+                playlistList.getItems().set(indexOfMediaInPlaylist, mediaEntity);
+
+                try {
+                    playlistEntity = new PlaylistEntity();
+                    playlistEntity.setMediaEntityList(playlistList.getItems());
+                    playlistSaveFile = new File("unsavedPlaylist.fxp");
+                    savePlaylist();
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+            }
+
         }
     }
 
