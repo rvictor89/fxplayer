@@ -104,6 +104,7 @@ public class FXPlayercontroller implements Initializable {
     private void openfile() {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("WAV", "*.wav"));
         File file = fc.showOpenDialog(null);
         if (file != null) {
             String songpath = file.getAbsolutePath().replace("\\", "/");
@@ -305,6 +306,7 @@ public class FXPlayercontroller implements Initializable {
     private void addToList() {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("WAV", "*.wav"));
         List<File> file = fc.showOpenMultipleDialog(null);
         if (file != null && file.size() != 0) {
             for (File tmpFile : file) {
