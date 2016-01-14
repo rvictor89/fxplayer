@@ -7,13 +7,15 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.Slider;
+import javafx.scene.control.*;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.DataFormat;
+import javafx.scene.input.Dragboard;
+import javafx.scene.input.TransferMode;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
+import javafx.util.Callback;
 import javafx.util.Duration;
 
 import javax.xml.bind.JAXBContext;
@@ -72,8 +74,10 @@ public class FXPlayercontroller implements Initializable {
     private PlaylistEntity playlistEntity;
     private SliderVolumeListener volumeListener;
     private int clickIndex;
+    private int dropIndex;
     private long clickTimestamp;
     private double volume;
+    private final DataFormat dataFormat = new DataFormat("MediaEntity");
 
     /**
      * Method for the "Play" button. Controls the mediaplayer and the "Play" button text.
@@ -237,6 +241,7 @@ public class FXPlayercontroller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
+        playlistList.setCellFactory(new MediaListCallback());
         volumeListener = new SliderVolumeListener();
         playlistSaveFile = new File("unsavedPlaylist.fxp");
         volume = 1.0;
@@ -251,6 +256,7 @@ public class FXPlayercontroller implements Initializable {
                 //Do nothing
             }
         }
+
     }
 
     /**
@@ -498,6 +504,75 @@ public class FXPlayercontroller implements Initializable {
                 }
             }
 
+        }
+    }
+
+    /**
+     * Intern Callback for the rendering of the cells of the playlist. Handles Drag-and-Drop.
+     */
+    public class MediaListCallback implements Callback<ListView<MediaEntity>, ListCell<MediaEntity>> {
+
+        @Override
+        public ListCell<MediaEntity> call(ListView<MediaEntity> lv) {
+            ListCell<MediaEntity> cell = new ListCell<MediaEntity>() {
+                @Override
+                protected void updateItem(MediaEntity item, boolean empty) {
+                    super.updateItem(item, empty);
+                    if (empty || item == null) {
+                        setText(null);
+                        setGraphic(null);
+                    } else {
+                        setText(item.toString());
+                    }
+                }
+            };
+
+            cell.setOnDragDetected(event -> {
+                if (!cell.isEmpty()) {
+                    Dragboard db = cell.startDragAndDrop(TransferMode.MOVE);
+                    ClipboardContent cc = new ClipboardContent();
+                    cc.put(dataFormat, cell.getItem());
+                    db.setContent(cc);
+                    playlistList.getItems().remove(cell.getItem());
+                }
+            });
+
+            cell.setOnDragOver(event -> {
+                Dragboard db = event.getDragboard();
+                if (db.hasContent(dataFormat)) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+                    playlistList.getSelectionModel().select(cell.getIndex());
+                }
+            });
+
+            cell.setOnDragDone(event -> {
+                playlistList.getSelectionModel().select(dropIndex);
+                try {
+                    playlistEntity = new PlaylistEntity();
+                    playlistEntity.setMediaEntityList(playlistList.getItems());
+                    playlistSaveFile = new File("unsavedPlaylist.fxp");
+                    savePlaylist();
+                } catch (JAXBException e) {
+                    e.printStackTrace();
+                }
+            });
+
+            cell.setOnDragDropped(event -> {
+                Dragboard db = event.getDragboard();
+                if (db.hasContent(dataFormat)) {
+                    MediaEntity mediaEntity = (MediaEntity) db.getContent(dataFormat);
+                    dropIndex = cell.getIndex();
+                    if (dropIndex > playlistList.getItems().size()) {
+                        dropIndex = playlistList.getItems().size();
+                    }
+                    playlistList.getItems().add(dropIndex, mediaEntity);
+                    event.setDropCompleted(true);
+                } else {
+                    event.setDropCompleted(false);
+                }
+            });
+
+            return cell;
         }
     }
 

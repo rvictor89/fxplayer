@@ -4,13 +4,14 @@ import javafx.scene.media.Media;
 import javafx.util.Duration;
 
 import java.io.File;
+import java.io.Serializable;
 
 /**
  * Created by Ramon Victor on 26.10.2015.
  *
  * The MediaEntity containing Media attributes for saving into the fxp file.
  */
-public class MediaEntity {
+public class MediaEntity implements Serializable {
 
     private String source;
     private String title;
