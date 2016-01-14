@@ -73,6 +73,7 @@ public class FXPlayercontroller implements Initializable {
     private File playlistSaveFile;
     private PlaylistEntity playlistEntity;
     private SliderVolumeListener volumeListener;
+    private TimeSliderListener timeSliderListener;
     private int clickIndex;
     private int dropIndex;
     private long clickTimestamp;
@@ -145,6 +146,11 @@ public class FXPlayercontroller implements Initializable {
     private void sliderTimeReleased() {
         mediaplayer.seek(new Duration(sliderTime.getValue() * 1000));
         isSliderPressed = false;
+        int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
+        int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
+        minutesDuration = (int) mediaplayer.getTotalDuration().toMinutes() % 60;
+        secondsDuration = (int) mediaplayer.getTotalDuration().toSeconds() % 60;
+        timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
     }
 
     /**
@@ -243,6 +249,7 @@ public class FXPlayercontroller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         volumeListener = new SliderVolumeListener();
+        timeSliderListener = new TimeSliderListener();
         playlistSaveFile = new File("unsavedPlaylist.fxp");
         volume = 1.0;
         lblVolume.setText(String.format("%02d %%", (int) (volume * 100)));
@@ -387,10 +394,10 @@ public class FXPlayercontroller implements Initializable {
      */
     private class TimelabelListener implements InvalidationListener {
         public void invalidated(Observable observable) {
-            int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
-            int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
-            timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
             if (!isSliderPressed) {
+                int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
+                int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
+                timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
                 sliderTime.setValue(mediaplayer.getCurrentTime().toSeconds());
             }
         }
@@ -405,6 +412,19 @@ public class FXPlayercontroller implements Initializable {
                 volume = sliderVolume.getValue();
                 lblVolume.setText(String.format("%02d %%", (int) (volume * 100)));
                 mediaplayer.setVolume(volume);
+            }
+        }
+    }
+
+    /**
+     * Intern InvalidationListener for the time slider. Controls the shown time when sliding.
+     */
+    private class TimeSliderListener implements InvalidationListener {
+        public void invalidated(Observable observable) {
+            if (isSliderPressed) {
+                int minutes = (int) sliderTime.getValue() / 60;
+                int seconds = (int) sliderTime.getValue() % 60;
+                timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
             }
         }
     }
@@ -435,6 +455,8 @@ public class FXPlayercontroller implements Initializable {
             mediaplayer.currentTimeProperty().addListener(new TimelabelListener());
             sliderVolume.valueProperty().removeListener(volumeListener);
             sliderVolume.valueProperty().addListener(volumeListener);
+            sliderTime.valueProperty().removeListener(timeSliderListener);
+            sliderTime.valueProperty().addListener(timeSliderListener);
 
             playingMediaEntity = mediaEntity;
             playlistList.getItems().set(getPlayingIndex(), mediaEntity);
