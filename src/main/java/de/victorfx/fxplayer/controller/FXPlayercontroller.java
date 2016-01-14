@@ -241,7 +241,6 @@ public class FXPlayercontroller implements Initializable {
     @Override
     public void initialize(URL location, ResourceBundle resources) {
 
-        playlistList.setCellFactory(new MediaListCallback());
         volumeListener = new SliderVolumeListener();
         playlistSaveFile = new File("unsavedPlaylist.fxp");
         volume = 1.0;
@@ -256,6 +255,8 @@ public class FXPlayercontroller implements Initializable {
                 //Do nothing
             }
         }
+
+        playlistList.setCellFactory(new MediaListCallback());
 
     }
 
