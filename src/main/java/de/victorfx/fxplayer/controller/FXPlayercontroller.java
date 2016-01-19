@@ -35,7 +35,7 @@ import java.util.ResourceBundle;
  */
 public class FXPlayercontroller implements Initializable {
 
-    public static final int DOUBLECLICKTIME = 500;
+    private static final int DOUBLECLICKTIME = 500;
 
     @FXML
     private Label lblVolume;
@@ -481,7 +481,7 @@ public class FXPlayercontroller implements Initializable {
             sliderTime.setDisable(false);
             mediaplayer.setVolume(volume);
             mediaplayer.setAutoPlay(true);
-            btnPlay.setText("Pause");
+            btnPlay.setText(language.getString("pause"));
             btnPlay.setDisable(false);
             btnStop.setDisable(false);
             btnBefore.setDisable(false);
@@ -543,7 +543,7 @@ public class FXPlayercontroller implements Initializable {
     /**
      * Intern Callback for the rendering of the cells of the playlist. Handles Drag-and-Drop.
      */
-    public class MediaListCallback implements Callback<ListView<MediaEntity>, ListCell<MediaEntity>> {
+    private class MediaListCallback implements Callback<ListView<MediaEntity>, ListCell<MediaEntity>> {
 
         @Override
         public ListCell<MediaEntity> call(ListView<MediaEntity> lv) {
