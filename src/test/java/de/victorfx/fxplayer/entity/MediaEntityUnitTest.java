@@ -24,6 +24,9 @@ public class MediaEntityUnitTest {
         String toString = "00:01 | Title - Artist [Album] ";
         MediaEntity mediaEntity = BuildDummyMediaEntity();
         assertEquals(toString, mediaEntity.toString());
+        mediaEntity.setPlaying(true);
+        toString = " -> 00:01 | Title - Artist [Album] ";
+        assertEquals(toString, mediaEntity.toString());
     }
 
     @Test
@@ -48,12 +51,24 @@ public class MediaEntityUnitTest {
     public void testTitle() {
         MediaEntity mediaEntity = BuildDummyMediaEntity();
         assertEquals("Title", mediaEntity.getTitle());
+        mediaEntity.setTitle(null);
+        assertEquals("Source", mediaEntity.getTitle());
+        mediaEntity.setTitle(" ");
+        assertEquals("Source", mediaEntity.getTitle());
     }
 
     @Test
     public void testAlternativeConstructor() {
         MediaEntity mediaEntity = new MediaEntity("Source");
         assertEquals("Source", mediaEntity.getSource());
+    }
+
+    @Test
+    public void testPlaying() {
+        MediaEntity mediaEntity = BuildDummyMediaEntity();
+        assertEquals(false, mediaEntity.isPlaying());
+        mediaEntity.setPlaying(true);
+        assertEquals(true, mediaEntity.isPlaying());
     }
 
     @Test
