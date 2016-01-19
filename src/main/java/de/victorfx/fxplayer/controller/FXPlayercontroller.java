@@ -79,6 +79,7 @@ public class FXPlayercontroller implements Initializable {
     private long clickTimestamp;
     private double volume;
     private final DataFormat dataFormat = new DataFormat("MediaEntity");
+    private ResourceBundle language;
 
     /**
      * Method for the "Play" button. Controls the mediaplayer and the "Play" button text.
@@ -87,13 +88,13 @@ public class FXPlayercontroller implements Initializable {
     private void play() {
         if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
             mediaplayer.play();
-            btnPlay.setText("Pause");
+            btnPlay.setText(language.getString("pause"));
         } else if (mediaplayer.getStatus() == MediaPlayer.Status.PLAYING) {
             mediaplayer.pause();
-            btnPlay.setText("Resume");
+            btnPlay.setText(language.getString("resume"));
         } else if (mediaplayer.getStatus() == MediaPlayer.Status.STOPPED) {
             mediaplayer.play();
-            btnPlay.setText("Pause");
+            btnPlay.setText(language.getString("pause"));
             btnStop.setDisable(false);
         }
     }
@@ -127,7 +128,7 @@ public class FXPlayercontroller implements Initializable {
             mediaplayer.seek(new Duration(0.0));
             mediaplayer.stop();
             btnStop.setDisable(true);
-            btnPlay.setText("Play");
+            btnPlay.setText(language.getString("play"));
         }
     }
 
@@ -247,6 +248,8 @@ public class FXPlayercontroller implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        language = resources;
 
         volumeListener = new SliderVolumeListener();
         timeSliderListener = new TimeSliderListener();

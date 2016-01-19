@@ -8,9 +8,13 @@ import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import javafx.stage.StageStyle;
 
+import java.net.URL;
+import java.util.Locale;
+import java.util.ResourceBundle;
+
 /**
  * Created by Ramon Victor on 17.10.2015.
- *
+ * <p>
  * Main class. Sets the primaryStage and loads the scenes.
  */
 public class Main extends Application {
@@ -21,11 +25,13 @@ public class Main extends Application {
 
     @Override
     public void start(Stage primaryStage) throws Exception {
+        ResourceBundle language = ResourceBundle.getBundle("de.victorfx.fxplayer.language", Locale.getDefault());
         primaryStage.initStyle(StageStyle.UNIFIED);
         addFavIcons(primaryStage);
         primaryStage.setResizable(true);
-        primaryStage.setTitle("FXPlayer 1.0-SNAPSHOT");
-        Parent fxplayer = FXMLLoader.load(getClass().getResource("fxml/fxplayer.fxml"));
+        primaryStage.setTitle(language.getString("appTitle"));
+        URL fxml = getClass().getResource("fxml/fxplayer.fxml");
+        Parent fxplayer = FXMLLoader.load(fxml, language);
         Scene root = new Scene(fxplayer);
         primaryStage.setScene(root);
         primaryStage.show();
