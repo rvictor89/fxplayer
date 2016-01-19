@@ -461,8 +461,13 @@ public class FXPlayercontroller implements Initializable {
             sliderTime.valueProperty().removeListener(timeSliderListener);
             sliderTime.valueProperty().addListener(timeSliderListener);
 
+            if (playingMediaEntity != null) {
+                playingMediaEntity.setPlaying(false);
+            }
             playingMediaEntity = mediaEntity;
+            playingMediaEntity.setPlaying(true);
             playlistList.getItems().set(getPlayingIndex(), mediaEntity);
+            playlistList.refresh();
 
             try {
                 playlistEntity = new PlaylistEntity();

@@ -3,12 +3,13 @@ package de.victorfx.fxplayer.entity;
 import javafx.scene.media.Media;
 import javafx.util.Duration;
 
+import javax.xml.bind.annotation.XmlTransient;
 import java.io.File;
 import java.io.Serializable;
 
 /**
  * Created by Ramon Victor on 26.10.2015.
- *
+ * <p>
  * The MediaEntity containing Media attributes for saving into the fxp file.
  */
 public class MediaEntity implements Serializable {
@@ -18,6 +19,8 @@ public class MediaEntity implements Serializable {
     private String artist;
     private String album;
     private double durationMillis;
+    @XmlTransient
+    private boolean isPlaying = false;
 
     public MediaEntity() {
     }
@@ -68,8 +71,26 @@ public class MediaEntity implements Serializable {
         return new Media(source);
     }
 
+    public boolean isPlaying() {
+        return isPlaying;
+    }
+
+    @XmlTransient
+    public void setPlaying(boolean isPlaying) {
+        this.isPlaying = isPlaying;
+    }
+
+    public String getSource() {
+        return source;
+    }
+
+    public void setSource(String source) {
+        this.source = source;
+    }
+
     /**
      * Format the returning string to a nice form.
+     *
      * @return formatted String
      */
     @Override
@@ -85,15 +106,11 @@ public class MediaEntity implements Serializable {
             seconds = (int) duration.toSeconds() % 60;
         }
         String niceFormat = String.format("%02d:%02d", minutes, seconds);
-        return niceFormat + " | " + tmpTitle + " - " + tmpArtist + " [" + tmpAlbum + "] ";
-    }
-
-    public String getSource() {
-        return source;
-    }
-
-    public void setSource(String source) {
-        this.source = source;
+        if (isPlaying()) {
+            return " -> " + niceFormat + " | " + tmpTitle + " - " + tmpArtist + " [" + tmpAlbum + "] ";
+        } else {
+            return niceFormat + " | " + tmpTitle + " - " + tmpArtist + " [" + tmpAlbum + "] ";
+        }
     }
 
 }
