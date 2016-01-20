@@ -8,6 +8,7 @@ import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
@@ -36,7 +37,15 @@ import java.util.ResourceBundle;
 public class FXPlayercontroller implements Initializable {
 
     private static final int DOUBLECLICKTIME = 500;
-
+    private final DataFormat dataFormat = new DataFormat("MediaEntity");
+    @FXML
+    private TableColumn<Object, Object> tableColTitle;
+    @FXML
+    private TableColumn<Object, Object> tableColArtist;
+    @FXML
+    private TableColumn<Object, Object> tableColAlbum;
+    @FXML
+    private TableColumn<MediaEntity, Double> tableColDuration;
     @FXML
     private Label lblVolume;
     @FXML
@@ -46,7 +55,7 @@ public class FXPlayercontroller implements Initializable {
     @FXML
     private Label lblAlbum;
     @FXML
-    private ListView<MediaEntity> playlistList;
+    private TableView<MediaEntity> playlistList;
     @FXML
     private Label lblTitle;
     @FXML
@@ -61,7 +70,6 @@ public class FXPlayercontroller implements Initializable {
     private Label timelabel;
     @FXML
     private Button btnPlay;
-
     private Media media;
     private MediaPlayer mediaplayer;
     private FileChooser fc;
@@ -78,7 +86,6 @@ public class FXPlayercontroller implements Initializable {
     private int dropIndex;
     private long clickTimestamp;
     private double volume;
-    private final DataFormat dataFormat = new DataFormat("MediaEntity");
     private ResourceBundle language;
 
     /**
@@ -251,6 +258,11 @@ public class FXPlayercontroller implements Initializable {
 
         language = resources;
 
+        tableColDuration.setCellValueFactory(new PropertyValueFactory<>("niceDuration"));
+        tableColAlbum.setCellValueFactory(new PropertyValueFactory<>("album"));
+        tableColArtist.setCellValueFactory(new PropertyValueFactory<>("artist"));
+        tableColTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
+
         volumeListener = new SliderVolumeListener();
         timeSliderListener = new TimeSliderListener();
         playlistSaveFile = new File("unsavedPlaylist.fxp");
@@ -267,8 +279,7 @@ public class FXPlayercontroller implements Initializable {
             }
         }
 
-        playlistList.setCellFactory(new MediaListCallback());
-
+        playlistList.setRowFactory(new MediaListCallback());
     }
 
     /**
@@ -543,42 +554,36 @@ public class FXPlayercontroller implements Initializable {
     /**
      * Intern Callback for the rendering of the cells of the playlist. Handles Drag-and-Drop.
      */
-    private class MediaListCallback implements Callback<ListView<MediaEntity>, ListCell<MediaEntity>> {
+    private class MediaListCallback implements Callback<TableView<MediaEntity>, TableRow<MediaEntity>> {
 
         @Override
-        public ListCell<MediaEntity> call(ListView<MediaEntity> lv) {
-            ListCell<MediaEntity> cell = new ListCell<MediaEntity>() {
+        public TableRow<MediaEntity> call(TableView<MediaEntity> param) {
+            TableRow<MediaEntity> row = new TableRow<MediaEntity>() {
                 @Override
                 protected void updateItem(MediaEntity item, boolean empty) {
                     super.updateItem(item, empty);
-                    if (empty || item == null) {
-                        setText(null);
-                        setGraphic(null);
-                    } else {
-                        setText(item.toString());
-                    }
                 }
             };
 
-            cell.setOnDragDetected(event -> {
-                if (!cell.isEmpty()) {
-                    Dragboard db = cell.startDragAndDrop(TransferMode.MOVE);
+            row.setOnDragDetected(event -> {
+                if (!row.isEmpty()) {
+                    Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
                     ClipboardContent cc = new ClipboardContent();
-                    cc.put(dataFormat, cell.getItem());
+                    cc.put(dataFormat, row.getItem());
                     db.setContent(cc);
-                    playlistList.getItems().remove(cell.getItem());
+                    playlistList.getItems().remove(row.getItem());
                 }
             });
 
-            cell.setOnDragOver(event -> {
+            row.setOnDragOver(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(dataFormat)) {
                     event.acceptTransferModes(TransferMode.MOVE);
-                    playlistList.getSelectionModel().select(cell.getIndex());
+                    playlistList.getSelectionModel().select(row.getIndex());
                 }
             });
 
-            cell.setOnDragDone(event -> {
+            row.setOnDragDone(event -> {
                 playlistList.getSelectionModel().select(dropIndex);
                 try {
                     playlistEntity = new PlaylistEntity();
@@ -590,11 +595,11 @@ public class FXPlayercontroller implements Initializable {
                 }
             });
 
-            cell.setOnDragDropped(event -> {
+            row.setOnDragDropped(event -> {
                 Dragboard db = event.getDragboard();
                 if (db.hasContent(dataFormat)) {
                     MediaEntity mediaEntity = (MediaEntity) db.getContent(dataFormat);
-                    dropIndex = cell.getIndex();
+                    dropIndex = row.getIndex();
                     if (dropIndex > playlistList.getItems().size()) {
                         dropIndex = playlistList.getItems().size();
                     }
@@ -605,7 +610,7 @@ public class FXPlayercontroller implements Initializable {
                 }
             });
 
-            return cell;
+            return row;
         }
     }
 

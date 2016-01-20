@@ -34,6 +34,7 @@ public class Main extends Application {
         Parent fxplayer = FXMLLoader.load(fxml, language);
         Scene root = new Scene(fxplayer);
         primaryStage.setScene(root);
+        primaryStage.setMaximized(true);
         primaryStage.show();
     }
 

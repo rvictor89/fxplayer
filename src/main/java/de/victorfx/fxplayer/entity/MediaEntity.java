@@ -7,6 +7,8 @@ import javax.xml.bind.annotation.XmlTransient;
 import java.io.File;
 import java.io.Serializable;
 
+import static java.lang.String.format;
+
 /**
  * Created by Ramon Victor on 26.10.2015.
  * <p>
@@ -88,6 +90,14 @@ public class MediaEntity implements Serializable {
         this.source = source;
     }
 
+    @XmlTransient
+    public String getNiceDuration() {
+        Duration duration = new Duration(durationMillis);
+        int minutes = (int) duration.toMinutes() % 60;
+        int seconds = (int) duration.toSeconds() % 60;
+        return format("%02d:%02d", minutes, seconds);
+    }
+
     /**
      * Format the returning string to a nice form.
      *
@@ -105,7 +115,7 @@ public class MediaEntity implements Serializable {
             minutes = (int) duration.toMinutes() % 60;
             seconds = (int) duration.toSeconds() % 60;
         }
-        String niceFormat = String.format("%02d:%02d", minutes, seconds);
+        String niceFormat = format("%02d:%02d", minutes, seconds);
         if (isPlaying()) {
             return " -> " + niceFormat + " | " + tmpTitle + " - " + tmpArtist + " [" + tmpAlbum + "] ";
         } else {

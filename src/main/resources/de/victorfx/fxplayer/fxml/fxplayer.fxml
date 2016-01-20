@@ -4,8 +4,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="301.0" prefWidth="602.0" styleClass="background"
-          stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+<GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
+          styleClass="background" stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40"
           fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
     <columnConstraints>
         <ColumnConstraints/>
@@ -71,9 +71,20 @@
         <Label fx:id="lblTitle" text="-" GridPane.columnIndex="3"/>
         <Label fx:id="lblArtist" text="-" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
         <Accordion GridPane.columnIndex="3" GridPane.rowIndex="7"/>
-        <ListView fx:id="playlistList" onMouseClicked="#playlistClick" prefHeight="78.0" prefWidth="532.0"
-                  styleClass="table-view" GridPane.columnIndex="1" GridPane.columnSpan="2147483647"
-                  GridPane.rowIndex="7" GridPane.vgrow="ALWAYS"/>
+        <TableView fx:id="playlistList" onMouseClicked="#playlistClick" prefHeight="78.0" prefWidth="532.0"
+                   styleClass="table-view" GridPane.columnIndex="1" GridPane.columnSpan="2147483647"
+                   GridPane.rowIndex="7" GridPane.vgrow="ALWAYS">
+            <columns>
+                <TableColumn fx:id="tableColDuration" editable="false" maxWidth="-1.0" minWidth="115.0" prefWidth="-1.0"
+                             resizable="false" sortable="false" text="Duration"/>
+                <TableColumn fx:id="tableColTitle" editable="false" prefWidth="75.0" text="Titel"/>
+                <TableColumn fx:id="tableColArtist" editable="false" prefWidth="75.0" text="Interpret"/>
+                <TableColumn fx:id="tableColAlbum" editable="false" prefWidth="75.0" text="Album"/>
+            </columns>
+            <columnResizePolicy>
+                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY"/>
+            </columnResizePolicy>
+        </TableView>
         <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0"
               GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="9">
             <children>
