@@ -555,7 +555,7 @@ public class FXPlayercontroller implements Initializable {
     }
 
     /**
-     * Intern Callback for the rendering of the cells of the playlist. Handles Drag-and-Drop.
+     * Intern Callback for the rendering of the rows of the playlist. Handles Drag-and-Drop.
      */
     private class MediaListCallback implements Callback<TableView<MediaEntity>, TableRow<MediaEntity>> {
 
