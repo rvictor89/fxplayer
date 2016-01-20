@@ -8,6 +8,8 @@ import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.control.*;
+import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
@@ -23,6 +25,7 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
+import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.Date;
@@ -561,6 +564,11 @@ public class FXPlayercontroller implements Initializable {
             TableRow<MediaEntity> row = new TableRow<MediaEntity>() {
                 @Override
                 protected void updateItem(MediaEntity item, boolean empty) {
+                    if (item != null) {
+                        if (item.isPlaying()) {
+                            getStyleClass().add("media-playing");
+                        }
+                    }
                     super.updateItem(item, empty);
                 }
             };
