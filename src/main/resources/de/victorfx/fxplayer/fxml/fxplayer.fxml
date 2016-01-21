@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
 <?import javafx.geometry.*?>
+<?import javafx.scene.chart.BarChart?>
+<?import javafx.scene.chart.CategoryAxis?>
+<?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
@@ -28,6 +31,7 @@
         <RowConstraints minHeight="-Infinity" prefHeight="29.0" vgrow="ALWAYS"/>
         <RowConstraints vgrow="NEVER"/>
         <RowConstraints minHeight="-Infinity" prefHeight="29.0" vgrow="NEVER"/>
+        <RowConstraints minHeight="-Infinity" prefHeight="29.0" vgrow="ALWAYS"/>
     </rowConstraints>
     <children>
         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
@@ -144,5 +148,18 @@
         <Label fx:id="lblVolume" alignment="CENTER" contentDisplay="CENTER" text="- %" GridPane.columnIndex="5"
                GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
                GridPane.rowIndex="5" GridPane.vgrow="NEVER"/>
+        <BarChart fx:id="spektrum" alternativeRowFillVisible="false" animated="false" barGap="0.0" categoryGap="0.0"
+                  horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" legendVisible="false"
+                  styleClass="bar-chart" verticalGridLinesVisible="false" verticalZeroLineVisible="false"
+                  GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="10">
+            <xAxis>
+                <CategoryAxis animated="false" side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false"
+                              visible="false"/>
+            </xAxis>
+            <yAxis>
+                <NumberAxis animated="false" autoRanging="false" minorTickVisible="false" side="LEFT"
+                            tickLabelsVisible="false" tickMarkVisible="false" upperBound="50.0" visible="false"/>
+            </yAxis>
+        </BarChart>
     </children>
 </GridPane>

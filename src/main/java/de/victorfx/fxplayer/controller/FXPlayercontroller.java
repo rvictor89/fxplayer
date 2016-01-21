@@ -7,14 +7,15 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
+import javafx.scene.chart.BarChart;
+import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.DataFormat;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.TransferMode;
+import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.stage.FileChooser;
@@ -25,7 +26,6 @@ import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
-import java.awt.*;
 import java.io.File;
 import java.net.URL;
 import java.util.Date;
@@ -40,7 +40,12 @@ import java.util.ResourceBundle;
 public class FXPlayercontroller implements Initializable {
 
     private static final int DOUBLECLICKTIME = 500;
+    public static final int BANDS = 16;
+    public static final double INTERVAL = 0.005;
+    public static final double DROPDOWN = 0.1;
     private final DataFormat dataFormat = new DataFormat("MediaEntity");
+    @FXML
+    private BarChart<String, Number> spektrum;
     @FXML
     private TableColumn<Object, Object> tableColTitle;
     @FXML
@@ -90,6 +95,7 @@ public class FXPlayercontroller implements Initializable {
     private long clickTimestamp;
     private double volume;
     private ResourceBundle language;
+    private XYChart.Data[] series1Data;
 
     /**
      * Method for the "Play" button. Controls the mediaplayer and the "Play" button text.
@@ -260,6 +266,14 @@ public class FXPlayercontroller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         language = resources;
+
+        XYChart.Series<String,Number> series1 = new XYChart.Series<>();
+        series1Data = new XYChart.Data[BANDS];
+        for (int i=0; i<series1Data.length; i++) {
+            series1Data[i] = new XYChart.Data<>( Integer.toString(i+1),0);
+            series1.getData().add(series1Data[i]);
+        }
+        spektrum.getData().add(series1);
 
         tableColDuration.setCellValueFactory(new PropertyValueFactory<>("niceDuration"));
         tableColAlbum.setCellValueFactory(new PropertyValueFactory<>("album"));
@@ -470,6 +484,9 @@ public class FXPlayercontroller implements Initializable {
             sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds());
 
             mediaplayer.currentTimeProperty().addListener(new TimelabelListener());
+            mediaplayer.setAudioSpectrumListener(new SpektrumListener());
+            mediaplayer.setAudioSpectrumNumBands(BANDS);
+            mediaplayer.setAudioSpectrumInterval(INTERVAL);
             sliderVolume.valueProperty().removeListener(volumeListener);
             sliderVolume.valueProperty().addListener(volumeListener);
             sliderTime.valueProperty().removeListener(timeSliderListener);
@@ -619,6 +636,23 @@ public class FXPlayercontroller implements Initializable {
             });
 
             return row;
+        }
+    }
+
+    private class SpektrumListener implements AudioSpectrumListener {
+        float[] buffer = new float[BANDS];
+
+        @Override
+        public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
+            for (int i = 0; i < magnitudes.length; i++) {
+                if (magnitudes[i] >= buffer[i]) {
+                    buffer[i] = magnitudes[i];
+                    series1Data[i].setYValue(magnitudes[i]-mediaplayer.getAudioSpectrumThreshold());
+                } else {
+                    series1Data[i].setYValue(buffer[i]-mediaplayer.getAudioSpectrumThreshold());
+                    buffer[i]-=DROPDOWN;
+                }
+            }
         }
     }
 

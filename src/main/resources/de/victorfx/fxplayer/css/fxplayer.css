@@ -72,6 +72,18 @@
     -fx-border-color: -fx-focus-color;
 }
 
+.chart {
+    -fx-background-color: transparent;
+}
+
+.chart-plot-background {
+    -fx-background-color: transparent
+}
+
+.axis {
+    -fx-border-color: transparent;
+}
+
 .split-pane:horizontal > .split-pane-divider {
     -fx-border-color: transparent #1d1d1d transparent #1d1d1d;
     -fx-background-color: transparent, derive(#1d1d1d,20%);
