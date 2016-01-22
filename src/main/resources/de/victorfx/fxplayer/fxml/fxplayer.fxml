@@ -8,8 +8,9 @@
 <?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="background"
-          stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
+<GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
+          prefWidth="800.0"
+          styleClass="background" stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40"
           fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
     <columnConstraints>
         <ColumnConstraints/>
@@ -35,13 +36,6 @@
         <RowConstraints minHeight="-Infinity"/>
     </rowConstraints>
     <children>
-        <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
-                onAction="#openfile" text="%openFile" GridPane.columnIndex="1" GridPane.halignment="CENTER"
-                GridPane.valignment="CENTER">
-            <GridPane.margin>
-                <Insets left="1.0" top="1.0"/>
-            </GridPane.margin>
-        </Button>
         <Slider fx:id="sliderTime" blockIncrement="1.0" disable="true" nodeOrientation="LEFT_TO_RIGHT"
                 onMousePressed="#sliderTimePressed" onMouseReleased="#sliderTimeReleased" prefHeight="14.0"
                 prefWidth="171.0" GridPane.columnIndex="1" GridPane.columnSpan="3" GridPane.rowIndex="3">
@@ -173,5 +167,14 @@
                 <Font name="System Bold" size="12.0"/>
             </font>
         </TitledPane>
+        <MenuBar maxHeight="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowSpan="2">
+            <menus>
+                <Menu mnemonicParsing="false" text="Menü">
+                    <items>
+                        <MenuItem mnemonicParsing="false" onAction="#openfile" text="%openFile"/>
+                    </items>
+                </Menu>
+            </menus>
+        </MenuBar>
     </children>
 </GridPane>

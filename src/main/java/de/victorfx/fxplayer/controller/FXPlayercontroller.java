@@ -40,9 +40,9 @@ import java.util.ResourceBundle;
  */
 public class FXPlayercontroller implements Initializable {
 
-    public static final int BANDS = 32;
-    public static final double INTERVAL = 0.005;
-    public static final double DROPDOWN = 0.1;
+    private static final int BANDS = 32;
+    private static final double INTERVAL = 0.005;
+    private static final double DROPDOWN = 0.1;
     private static final int DOUBLECLICKTIME = 500;
     private final DataFormat dataFormat = new DataFormat("MediaEntity");
     @FXML
@@ -272,6 +272,7 @@ public class FXPlayercontroller implements Initializable {
         series1Data = new XYChart.Data[BANDS + 2];
         for (int i = 0; i < series1Data.length; i++) {
             series1Data[i] = new XYChart.Data<>(Integer.toString(i + 1), 0);
+            //noinspection unchecked
             series1.getData().add(series1Data[i]);
         }
         spektrum.getData().add(series1);
@@ -661,13 +662,17 @@ public class FXPlayercontroller implements Initializable {
 
         @Override
         public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
+            //noinspection unchecked
             series1Data[0].setYValue(0);
+            //noinspection unchecked
             series1Data[BANDS + 1].setYValue(0);
             for (int i = 0; i < magnitudes.length; i++) {
                 if (magnitudes[i] >= buffer[i]) {
                     buffer[i] = magnitudes[i];
+                    //noinspection unchecked
                     series1Data[i + 1].setYValue(magnitudes[i] - mediaplayer.getAudioSpectrumThreshold());
                 } else {
+                    //noinspection unchecked
                     series1Data[i + 1].setYValue(buffer[i] - mediaplayer.getAudioSpectrumThreshold());
                     buffer[i] -= DROPDOWN;
                 }
