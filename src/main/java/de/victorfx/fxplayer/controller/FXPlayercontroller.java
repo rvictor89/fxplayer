@@ -28,6 +28,7 @@ import javax.xml.bind.Marshaller;
 import javax.xml.bind.Unmarshaller;
 import java.io.File;
 import java.net.URL;
+import java.util.Arrays;
 import java.util.Date;
 import java.util.List;
 import java.util.ResourceBundle;
@@ -421,6 +422,18 @@ public class FXPlayercontroller implements Initializable {
     }
 
     /**
+     * Creates a float[] filled with the given value.
+     * @param size the size of the float[]
+     * @param fillValue the value which will be filled in the float[]
+     * @return the filled float[]
+     */
+    private float[] createFilledBuffer(int size, float fillValue) {
+        float[] floats = new float[size];
+        Arrays.fill(floats, fillValue);
+        return floats;
+    }
+
+    /**
      * Intern InvalidationListener for the Label showing the current and total time of the media. Updates the label with the current time and the total time of the playing media.
      */
     private class TimelabelListener implements InvalidationListener {
@@ -643,7 +656,7 @@ public class FXPlayercontroller implements Initializable {
      * Intern AudioSpectrumListener for the audio visualization.
      */
     private class SpektrumListener implements AudioSpectrumListener {
-        float[] buffer = new float[BANDS];
+        float[] buffer = createFilledBuffer(BANDS, mediaplayer.getAudioSpectrumThreshold());
 
         @Override
         public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
