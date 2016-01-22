@@ -76,6 +76,14 @@
     -fx-background-color: transparent;
 }
 
+.default-color0.chart-series-area-line {
+    -fx-stroke: -fx-focus-color;
+}
+
+.default-color0.chart-series-area-fill {
+    -fx-fill: -fx-focus-color;
+}
+
 .chart-plot-background {
     -fx-background-color: transparent
 }

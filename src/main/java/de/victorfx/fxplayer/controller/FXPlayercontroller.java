@@ -7,7 +7,7 @@ import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
-import javafx.scene.chart.BarChart;
+import javafx.scene.chart.AreaChart;
 import javafx.scene.chart.XYChart;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
@@ -39,13 +39,13 @@ import java.util.ResourceBundle;
  */
 public class FXPlayercontroller implements Initializable {
 
-    private static final int DOUBLECLICKTIME = 500;
-    public static final int BANDS = 16;
+    public static final int BANDS = 32;
     public static final double INTERVAL = 0.005;
     public static final double DROPDOWN = 0.1;
+    private static final int DOUBLECLICKTIME = 500;
     private final DataFormat dataFormat = new DataFormat("MediaEntity");
     @FXML
-    private BarChart<String, Number> spektrum;
+    private AreaChart<String, Number> spektrum;
     @FXML
     private TableColumn<Object, Object> tableColTitle;
     @FXML
@@ -267,10 +267,10 @@ public class FXPlayercontroller implements Initializable {
 
         language = resources;
 
-        XYChart.Series<String,Number> series1 = new XYChart.Series<>();
+        XYChart.Series<String, Number> series1 = new XYChart.Series<>();
         series1Data = new XYChart.Data[BANDS];
-        for (int i=0; i<series1Data.length; i++) {
-            series1Data[i] = new XYChart.Data<>( Integer.toString(i+1),0);
+        for (int i = 0; i < series1Data.length; i++) {
+            series1Data[i] = new XYChart.Data<>(Integer.toString(i + 1), 0);
             series1.getData().add(series1Data[i]);
         }
         spektrum.getData().add(series1);
@@ -639,6 +639,9 @@ public class FXPlayercontroller implements Initializable {
         }
     }
 
+    /**
+     * Intern AudioSpectrumListener for the audio visualization.
+     */
     private class SpektrumListener implements AudioSpectrumListener {
         float[] buffer = new float[BANDS];
 
@@ -647,10 +650,10 @@ public class FXPlayercontroller implements Initializable {
             for (int i = 0; i < magnitudes.length; i++) {
                 if (magnitudes[i] >= buffer[i]) {
                     buffer[i] = magnitudes[i];
-                    series1Data[i].setYValue(magnitudes[i]-mediaplayer.getAudioSpectrumThreshold());
+                    series1Data[i].setYValue(magnitudes[i] - mediaplayer.getAudioSpectrumThreshold());
                 } else {
-                    series1Data[i].setYValue(buffer[i]-mediaplayer.getAudioSpectrumThreshold());
-                    buffer[i]-=DROPDOWN;
+                    series1Data[i].setYValue(buffer[i] - mediaplayer.getAudioSpectrumThreshold());
+                    buffer[i] -= DROPDOWN;
                 }
             }
         }

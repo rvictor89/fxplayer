@@ -35,6 +35,7 @@ public class Main extends Application {
         Scene root = new Scene(fxplayer);
         primaryStage.setScene(root);
         primaryStage.setMaximized(true);
+        //primaryStage.setFullScreen(true);
         primaryStage.show();
     }
 
