@@ -9,9 +9,8 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-          prefWidth="800.0"
-          styleClass="background" stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40"
-          fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
+          prefWidth="800.0" styleClass="background" stylesheets="@../css/fxplayer.css"
+          xmlns="http://javafx.com/javafx/8.0.40" fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
     <columnConstraints>
         <ColumnConstraints/>
         <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="100.0"/>
@@ -167,7 +166,7 @@
                 <Font name="System Bold" size="12.0"/>
             </font>
         </TitledPane>
-        <MenuBar maxHeight="1.7976931348623157E308" GridPane.columnIndex="1" GridPane.rowSpan="2">
+        <MenuBar GridPane.columnIndex="1" GridPane.rowSpan="2" GridPane.valignment="TOP">
             <menus>
                 <Menu mnemonicParsing="false" text="Menü">
                     <items>
