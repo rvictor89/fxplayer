@@ -15,3 +15,6 @@ Aktuelle Änderungen gegenüber MASTER Branch:
 - Songs können per Drag-and-Drop verschoben werden in der Playlist
 - MP3 und WAV können abgespielt werden
 - Wenn manuell per Slider zu einer anderen Stelle im Song gesprungen wird, wird die Zeit beim "sliden" auch angezeigt
+- Anzeige des aktuell gespielten Songs
+- Support für Englisch und Deutsch
+- Audio Visualisierung
