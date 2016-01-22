@@ -7,8 +7,8 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
-<GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0"
-          styleClass="background" stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40"
+<GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="background"
+          stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40" xmlns:fx="http://javafx.com/fxml/1"
           fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
     <columnConstraints>
         <ColumnConstraints/>
@@ -31,7 +31,7 @@
         <RowConstraints minHeight="-Infinity" prefHeight="29.0" vgrow="ALWAYS"/>
         <RowConstraints vgrow="NEVER"/>
         <RowConstraints minHeight="-Infinity" prefHeight="29.0" vgrow="NEVER"/>
-        <RowConstraints minHeight="-Infinity" prefHeight="29.0" vgrow="ALWAYS"/>
+        <RowConstraints minHeight="-Infinity"/>
     </rowConstraints>
     <children>
         <Button maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" mnemonicParsing="false"
@@ -148,18 +148,26 @@
         <Label fx:id="lblVolume" alignment="CENTER" contentDisplay="CENTER" text="- %" GridPane.columnIndex="5"
                GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
                GridPane.rowIndex="5" GridPane.vgrow="NEVER"/>
-        <AreaChart fx:id="spektrum" alternativeRowFillVisible="false" animated="false" createSymbols="false"
-                   horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" legendVisible="false"
-                   styleClass="bar-chart" verticalGridLinesVisible="false" verticalZeroLineVisible="false"
-                   GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="10">
-            <xAxis>
-                <CategoryAxis animated="false" side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false"
-                              visible="false"/>
-            </xAxis>
-            <yAxis>
-                <NumberAxis animated="false" autoRanging="false" minorTickVisible="false" side="LEFT"
-                            tickLabelsVisible="false" tickMarkVisible="false" upperBound="50.0" visible="false"/>
-            </yAxis>
-        </AreaChart>
+        <TitledPane alignment="CENTER" contentDisplay="CENTER" expanded="false" text="Visualizer" textAlignment="CENTER"
+                    GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="10">
+            <content>
+                <AreaChart fx:id="spektrum" alternativeRowFillVisible="false" animated="false" createSymbols="false"
+                           horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" legendVisible="false"
+                           styleClass="bar-chart" verticalGridLinesVisible="false" verticalZeroLineVisible="false">
+                    <xAxis>
+                        <CategoryAxis animated="false" side="BOTTOM" tickLabelsVisible="false" tickMarkVisible="false"
+                                      visible="false"/>
+                    </xAxis>
+                    <yAxis>
+                        <NumberAxis animated="false" autoRanging="false" minorTickVisible="false" side="LEFT"
+                                    tickLabelsVisible="false" tickMarkVisible="false" upperBound="50.0"
+                                    visible="false"/>
+                    </yAxis>
+                </AreaChart>
+            </content>
+            <font>
+                <Font name="System Bold" size="12.0"/>
+            </font>
+        </TitledPane>
     </children>
 </GridPane>

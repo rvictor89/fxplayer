@@ -84,6 +84,11 @@
     -fx-fill: -fx-focus-color;
 }
 
+.titled-pane > *.content
+{
+    -fx-background-color: transparent;
+ }
+
 .chart-plot-background {
     -fx-background-color: transparent
 }
