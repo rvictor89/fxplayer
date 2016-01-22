@@ -269,7 +269,7 @@ public class FXPlayercontroller implements Initializable {
         language = resources;
 
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
-        series1Data = new XYChart.Data[BANDS];
+        series1Data = new XYChart.Data[BANDS + 2];
         for (int i = 0; i < series1Data.length; i++) {
             series1Data[i] = new XYChart.Data<>(Integer.toString(i + 1), 0);
             series1.getData().add(series1Data[i]);
@@ -423,7 +423,8 @@ public class FXPlayercontroller implements Initializable {
 
     /**
      * Creates a float[] filled with the given value.
-     * @param size the size of the float[]
+     *
+     * @param size      the size of the float[]
      * @param fillValue the value which will be filled in the float[]
      * @return the filled float[]
      */
@@ -660,12 +661,14 @@ public class FXPlayercontroller implements Initializable {
 
         @Override
         public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
+            series1Data[0].setYValue(0);
+            series1Data[BANDS + 1].setYValue(0);
             for (int i = 0; i < magnitudes.length; i++) {
                 if (magnitudes[i] >= buffer[i]) {
                     buffer[i] = magnitudes[i];
-                    series1Data[i].setYValue(magnitudes[i] - mediaplayer.getAudioSpectrumThreshold());
+                    series1Data[i + 1].setYValue(magnitudes[i] - mediaplayer.getAudioSpectrumThreshold());
                 } else {
-                    series1Data[i].setYValue(buffer[i] - mediaplayer.getAudioSpectrumThreshold());
+                    series1Data[i + 1].setYValue(buffer[i] - mediaplayer.getAudioSpectrumThreshold());
                     buffer[i] -= DROPDOWN;
                 }
             }

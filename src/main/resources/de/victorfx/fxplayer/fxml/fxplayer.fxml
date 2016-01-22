@@ -5,6 +5,7 @@
 <?import javafx.scene.chart.CategoryAxis?>
 <?import javafx.scene.chart.NumberAxis?>
 <?import javafx.scene.control.*?>
+<?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <GridPane minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" styleClass="background"
@@ -160,9 +161,12 @@
                     </xAxis>
                     <yAxis>
                         <NumberAxis animated="false" autoRanging="false" minorTickVisible="false" side="LEFT"
-                                    tickLabelsVisible="false" tickMarkVisible="false" upperBound="50.0"
+                                    tickLabelsVisible="false" tickMarkVisible="false" upperBound="55.0"
                                     visible="false"/>
                     </yAxis>
+                    <effect>
+                        <GaussianBlur radius="2.5"/>
+                    </effect>
                 </AreaChart>
             </content>
             <font>
