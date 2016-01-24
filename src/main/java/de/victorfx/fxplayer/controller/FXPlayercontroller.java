@@ -5,8 +5,6 @@ import de.victorfx.fxplayer.entity.MediaEntity;
 import de.victorfx.fxplayer.entity.PlaylistEntity;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
-import javafx.beans.binding.Bindings;
-import javafx.beans.property.DoubleProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.AreaChart;
@@ -488,8 +486,7 @@ public class FXPlayercontroller implements Initializable {
     private class PreparationWorker implements Runnable {
         public void run() {
 
-            videoView.setMediaPlayer(mediaplayer);
-
+            //videoView.setMediaPlayer(mediaplayer);
 
             String artist = (String) mediaplayer.getMedia().getMetadata().get("artist");
             String title = (String) mediaplayer.getMedia().getMetadata().get("title");
