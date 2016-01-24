@@ -35,6 +35,8 @@ public class Main extends Application {
         Scene root = new Scene(fxplayer);
         primaryStage.setScene(root);
         primaryStage.setMaximized(true);
+        //primaryStage.setWidth(1280);
+        //primaryStage.setHeight(720);
         //primaryStage.setFullScreen(true);
         primaryStage.show();
     }
