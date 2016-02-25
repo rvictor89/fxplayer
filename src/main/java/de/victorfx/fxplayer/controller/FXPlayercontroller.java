@@ -3,6 +3,7 @@ package de.victorfx.fxplayer.controller;
 import com.sun.javafx.collections.ObservableListWrapper;
 import de.victorfx.fxplayer.entity.MediaEntity;
 import de.victorfx.fxplayer.entity.PlaylistEntity;
+import javafx.animation.AnimationTimer;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
@@ -41,10 +42,12 @@ import java.util.ResourceBundle;
 public class FXPlayercontroller implements Initializable {
 
     private static final int BANDS = 32;
-    private static final double INTERVAL = 0.005;
-    private static final double DROPDOWN = 0.1;
+    private static final double INTERVAL = 0.015;
+    private static final double DROPDOWN = 0.25;
     private static final int DOUBLECLICKTIME = 500;
     private final DataFormat dataFormat = new DataFormat("MediaEntity");
+    @FXML
+    private Label fps;
     @FXML
     private AreaChart<String, Number> spektrum;
     @FXML
@@ -299,6 +302,8 @@ public class FXPlayercontroller implements Initializable {
         }
 
         playlistList.setRowFactory(new MediaListCallback());
+        AnimationTimer timer = new FPSCounter();
+        timer.start();
     }
 
     /**
@@ -677,6 +682,28 @@ public class FXPlayercontroller implements Initializable {
                     buffer[i] -= DROPDOWN;
                 }
             }
+        }
+    }
+
+    /**
+     * Intern AnimationTimer for computing the frames per second rate.
+     */
+    private class FPSCounter extends AnimationTimer {
+
+        long oldNowTime = 0;
+        long currentFramerate = 0;
+        long tmpTime = 0;
+
+        @Override
+        public void handle(long now) {
+            long elapsedTime = now - oldNowTime;
+            long tmpElapsedTime = now - tmpTime;
+            currentFramerate = 1_000_000_000 / elapsedTime;
+            if (tmpElapsedTime >= 1_000_000_000) {
+                fps.setText(String.valueOf(currentFramerate));
+                tmpTime = now;
+            }
+            oldNowTime = now;
         }
     }
 

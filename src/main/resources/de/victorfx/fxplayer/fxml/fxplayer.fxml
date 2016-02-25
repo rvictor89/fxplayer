@@ -9,8 +9,9 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.text.Font?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
-          prefWidth="800.0" styleClass="background" stylesheets="@../css/fxplayer.css"
-          xmlns="http://javafx.com/javafx/8.0.40" fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
+          prefWidth="800.0"
+          styleClass="background" stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40"
+          fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
     <columnConstraints>
         <ColumnConstraints/>
         <ColumnConstraints hgrow="NEVER" minWidth="-Infinity" prefWidth="100.0"/>
@@ -175,5 +176,7 @@
                 </Menu>
             </menus>
         </MenuBar>
+        <Label text="FPS:" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label fx:id="fps" text="-" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
     </children>
 </GridPane>
