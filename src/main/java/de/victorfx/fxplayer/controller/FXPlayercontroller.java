@@ -19,6 +19,7 @@ import javafx.scene.input.TransferMode;
 import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
+import javafx.scene.media.MediaView;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -48,6 +49,8 @@ public class FXPlayercontroller implements Initializable {
     private final DataFormat dataFormat = new DataFormat("MediaEntity");
     @FXML
     private Label fps;
+    @FXML
+    private MediaView videoView;
     @FXML
     private AreaChart<String, Number> spektrum;
     @FXML
@@ -127,6 +130,8 @@ public class FXPlayercontroller implements Initializable {
         fc = new FileChooser();
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("WAV", "*.wav"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP4", "*.mp4"));
+        fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("FLV", "*.flv"));
         File file = fc.showOpenDialog(null);
         if (file != null) {
             String songpath = file.getAbsolutePath().replace("\\", "/");
@@ -485,6 +490,9 @@ public class FXPlayercontroller implements Initializable {
      */
     private class PreparationWorker implements Runnable {
         public void run() {
+
+            //videoView.setMediaPlayer(mediaplayer);
+
             String artist = (String) mediaplayer.getMedia().getMetadata().get("artist");
             String title = (String) mediaplayer.getMedia().getMetadata().get("title");
             String album = (String) mediaplayer.getMedia().getMetadata().get("album");

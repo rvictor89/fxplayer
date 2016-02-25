@@ -7,6 +7,7 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.effect.GaussianBlur?>
 <?import javafx.scene.layout.*?>
+<?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
           prefWidth="800.0"
@@ -34,6 +35,7 @@
         <RowConstraints vgrow="NEVER"/>
         <RowConstraints minHeight="-Infinity" prefHeight="29.0" vgrow="NEVER"/>
         <RowConstraints minHeight="-Infinity"/>
+        <RowConstraints minHeight="-Infinity" prefHeight="0.0" vgrow="NEVER"/>
     </rowConstraints>
     <children>
         <Slider fx:id="sliderTime" blockIncrement="1.0" disable="true" nodeOrientation="LEFT_TO_RIGHT"
@@ -178,5 +180,29 @@
         </MenuBar>
         <Label text="FPS:" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
         <Label fx:id="fps" text="-" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+        <TitledPane alignment="CENTER" disable="true" expanded="false" text="Video" textAlignment="CENTER"
+                    visible="false" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.hgrow="NEVER"
+                    GridPane.rowIndex="11" GridPane.vgrow="NEVER">
+            <font>
+                <Font name="System Bold" size="12.0"/>
+            </font>
+            <content>
+                <GridPane>
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES"/>
+                        <ColumnConstraints halignment="CENTER" hgrow="NEVER" minWidth="150.0"/>
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" valignment="TOP"/>
+                    </rowConstraints>
+                    <children>
+                        <Button ellipsisString="Vollbild" mnemonicParsing="false" text="Vollbild" textAlignment="CENTER"
+                                GridPane.columnIndex="1"/>
+                        <MediaView fx:id="videoView" fitHeight="400.0" nodeOrientation="INHERIT"
+                                   GridPane.halignment="CENTER"/>
+                    </children>
+                </GridPane>
+            </content>
+        </TitledPane>
     </children>
 </GridPane>
