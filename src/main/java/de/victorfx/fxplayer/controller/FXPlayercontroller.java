@@ -37,7 +37,7 @@ import java.util.ResourceBundle;
 
 /**
  * Created by Ramon Victor on 17.10.2015.
- * <p>
+ *
  * Controller for the fxplayer.xml.
  */
 public class FXPlayercontroller implements Initializable {
@@ -47,44 +47,26 @@ public class FXPlayercontroller implements Initializable {
     private static final double DROPDOWN = 0.25;
     private static final int DOUBLECLICKTIME = 500;
     private final DataFormat dataFormat = new DataFormat("MediaEntity");
-    @FXML
-    private Label fps;
-    @FXML
-    private MediaView videoView;
-    @FXML
-    private AreaChart<String, Number> spektrum;
-    @FXML
-    private TableColumn<Object, Object> tableColTitle;
-    @FXML
-    private TableColumn<Object, Object> tableColArtist;
-    @FXML
-    private TableColumn<Object, Object> tableColAlbum;
-    @FXML
-    private TableColumn<MediaEntity, Double> tableColDuration;
-    @FXML
-    private Label lblVolume;
-    @FXML
-    private Button btnNext;
-    @FXML
-    private Button btnBefore;
-    @FXML
-    private Label lblAlbum;
-    @FXML
-    private TableView<MediaEntity> playlistList;
-    @FXML
-    private Label lblTitle;
-    @FXML
-    private Label lblArtist;
-    @FXML
-    private Slider sliderVolume;
-    @FXML
-    private Slider sliderTime;
-    @FXML
-    private Button btnStop;
-    @FXML
-    private Label timelabel;
-    @FXML
-    private Button btnPlay;
+    @FXML private TitledPane titledPaneVisualizer;
+    @FXML private Label fps;
+    @FXML private MediaView videoView;
+    @FXML private AreaChart<String, Number> spektrum;
+    @FXML private TableColumn<Object, Object> tableColTitle;
+    @FXML private TableColumn<Object, Object> tableColArtist;
+    @FXML private TableColumn<Object, Object> tableColAlbum;
+    @FXML private TableColumn<MediaEntity, Double> tableColDuration;
+    @FXML private Label lblVolume;
+    @FXML private Button btnNext;
+    @FXML private Button btnBefore;
+    @FXML private Label lblAlbum;
+    @FXML private TableView<MediaEntity> playlistList;
+    @FXML private Label lblTitle;
+    @FXML private Label lblArtist;
+    @FXML private Slider sliderVolume;
+    @FXML private Slider sliderTime;
+    @FXML private Button btnStop;
+    @FXML private Label timelabel;
+    @FXML private Button btnPlay;
     private Media media;
     private MediaPlayer mediaplayer;
     private FileChooser fc;
@@ -123,7 +105,8 @@ public class FXPlayercontroller implements Initializable {
     }
 
     /**
-     * Method for the "Open..." button. Opens a dialog to choose a mp3 song, this song is then added to the current playlist and started.
+     * Method for the "Open..." button. Opens a dialog to choose a mp3 song, this song is then added to the current
+     * playlist and started.
      */
     @FXML
     private void openfile() {
@@ -291,6 +274,7 @@ public class FXPlayercontroller implements Initializable {
         tableColTitle.setCellValueFactory(new PropertyValueFactory<>("title"));
 
         volumeListener = new SliderVolumeListener();
+        sliderVolume.valueProperty().addListener(volumeListener);
         timeSliderListener = new TimeSliderListener();
         playlistSaveFile = new File("unsavedPlaylist.fxp");
         volume = 1.0;
@@ -312,7 +296,8 @@ public class FXPlayercontroller implements Initializable {
     }
 
     /**
-     * Method for the "Save Playlist" button. Opens a dialog for saving the XML like fxp file containing the current playlist.
+     * Method for the "Save Playlist" button. Opens a dialog for saving the XML like fxp file containing the current
+     * playlist.
      *
      * @throws JAXBException
      */
@@ -446,14 +431,16 @@ public class FXPlayercontroller implements Initializable {
     }
 
     /**
-     * Intern InvalidationListener for the Label showing the current and total time of the media. Updates the label with the current time and the total time of the playing media.
+     * Intern InvalidationListener for the Label showing the current and total time of the media. Updates the label
+     * with the current time and the total time of the playing media.
      */
     private class TimelabelListener implements InvalidationListener {
         public void invalidated(Observable observable) {
             if (!isSliderPressed) {
                 int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
                 int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
-                timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
+                timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration,
+                        secondsDuration));
                 sliderTime.setValue(mediaplayer.getCurrentTime().toSeconds());
             }
         }
@@ -466,8 +453,10 @@ public class FXPlayercontroller implements Initializable {
         public void invalidated(Observable observable) {
             if (sliderVolume.isPressed()) {
                 volume = sliderVolume.getValue();
-                lblVolume.setText(String.format("%02d %%", (int) (volume * 100)));
-                mediaplayer.setVolume(volume);
+                lblVolume.setText(String.format("%01d %%", (int) (volume * 100)));
+                if (mediaplayer != null) {
+                    mediaplayer.setVolume(volume);
+                }
             }
         }
     }
@@ -480,13 +469,15 @@ public class FXPlayercontroller implements Initializable {
             if (isSliderPressed) {
                 int minutes = (int) sliderTime.getValue() / 60;
                 int seconds = (int) sliderTime.getValue() % 60;
-                timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
+                timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration,
+                        secondsDuration));
             }
         }
     }
 
     /**
-     * Intern Runnable for the mediaplayer.setOnReady method. Controls everything about the mediaplayer, ui and the temporary playlist.
+     * Intern Runnable for the mediaplayer.setOnReady method. Controls everything about the mediaplayer, ui and the
+     * temporary playlist.
      */
     private class PreparationWorker implements Runnable {
         public void run() {
@@ -508,13 +499,14 @@ public class FXPlayercontroller implements Initializable {
             int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
             minutesDuration = (int) mediaplayer.getTotalDuration().toMinutes() % 60;
             secondsDuration = (int) mediaplayer.getTotalDuration().toSeconds() % 60;
-            timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
+            timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration,
+                    secondsDuration));
             sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds());
 
             mediaplayer.currentTimeProperty().addListener(new TimelabelListener());
             mediaplayer.setAudioSpectrumListener(new SpektrumListener());
             mediaplayer.setAudioSpectrumNumBands(BANDS);
-            mediaplayer.setAudioSpectrumInterval(INTERVAL);
+            //mediaplayer.setAudioSpectrumInterval(INTERVAL);
             sliderVolume.valueProperty().removeListener(volumeListener);
             sliderVolume.valueProperty().addListener(volumeListener);
             sliderTime.valueProperty().removeListener(timeSliderListener);
@@ -710,6 +702,11 @@ public class FXPlayercontroller implements Initializable {
             if (tmpElapsedTime >= 1_000_000_000) {
                 fps.setText(String.valueOf(currentFramerate));
                 tmpTime = now;
+            }
+            if (titledPaneVisualizer.isExpanded() && mediaplayer != null) {
+                mediaplayer.setAudioSpectrumInterval(INTERVAL);
+            } else if (!titledPaneVisualizer.isExpanded() && mediaplayer != null) {
+                mediaplayer.setAudioSpectrumInterval(600);
             }
             oldNowTime = now;
         }

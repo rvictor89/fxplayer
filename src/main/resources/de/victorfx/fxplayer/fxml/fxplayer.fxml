@@ -63,7 +63,7 @@
                 <Insets left="10.0"/>
             </GridPane.margin>
         </Label>
-        <Label rotate="-90.0" text="%volume" GridPane.columnIndex="5" GridPane.columnSpan="2147483647"
+        <Label disable="true" rotate="-90.0" text="%volume" GridPane.columnIndex="5" GridPane.columnSpan="2147483647"
                GridPane.rowSpan="5">
             <GridPane.margin>
                 <Insets top="10.0"/>
@@ -145,8 +145,9 @@
         <Label fx:id="lblVolume" alignment="CENTER" contentDisplay="CENTER" text="- %" GridPane.columnIndex="5"
                GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
                GridPane.rowIndex="5" GridPane.vgrow="NEVER"/>
-        <TitledPane alignment="CENTER" contentDisplay="CENTER" expanded="false" text="Visualizer" textAlignment="CENTER"
-                    GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="10">
+        <TitledPane fx:id="titledPaneVisualizer" alignment="CENTER" contentDisplay="CENTER" expanded="false"
+                    text="Visualizer" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.columnSpan="2147483647"
+                    GridPane.rowIndex="10">
             <content>
                 <AreaChart fx:id="spektrum" alternativeRowFillVisible="false" animated="false" createSymbols="false"
                            horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" legendVisible="false"
@@ -178,7 +179,11 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <Label text="FPS:" GridPane.columnIndex="1" GridPane.rowIndex="2"/>
+        <Label text="FPS:" GridPane.columnIndex="1" GridPane.rowIndex="2">
+            <GridPane.margin>
+                <Insets left="5.0"/>
+            </GridPane.margin>
+        </Label>
         <Label fx:id="fps" text="-" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
         <TitledPane alignment="CENTER" disable="true" expanded="false" text="Video" textAlignment="CENTER"
                     visible="false" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.hgrow="NEVER"
