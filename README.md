@@ -1,20 +1,18 @@
-# FXPlayer 1.0-SNAPSHOT
-DEVELOP Branch für den FXPlayer.
+# FXPlayer 1.0
+by Ramon Victor
 
-Aktuelle Änderungen gegenüber MASTER Branch:
-- Songs können ausgewählt und abgespielt werden
-- Songs können gesteuert werden
-- Songs können per Slider zu einer bestimmten Zeit springen
-- Aktuelle Position im Song sowie Gesamtzeit werden angezeigt
-- Die Lautstärke des Songs kann geändert werden per Slider
-- Metadaten des Songs werden angezeigt
-- Playlist hinzugefügt: Hinzufügen und Entfernen eines Songs aus dieser
-- Playlists können nun gespeichert und geladen werden per Dialog
-- Die aktuelle Playlist wird zudem automatisch gespeichert und geladen
-- Die Metadaten werden automatisch im Hintergrund geladen
-- Songs können per Drag-and-Drop verschoben werden in der Playlist
-- MP3 und WAV können abgespielt werden
-- Wenn manuell per Slider zu einer anderen Stelle im Song gesprungen wird, wird die Zeit beim "sliden" auch angezeigt
-- Anzeige des aktuell gespielten Songs
-- Support für Englisch und Deutsch
-- Audio Visualisierung
+Willkommen auf der Github-Projektseite des FXPlayers!
+
+Der FXPlayer ist eine vollständig in JavaFX 8 geschriebener Audioplayer einschließlich einer Playlist sowie den zugehörigen Features wie Speichern, Öffnen, Reihenfolge der Lieder verändern, usw.
+Des Weiteren kann bei Bedarf eine Audio-Visualisierung dazu geschaltet werden.
+
+Es werden folgende Audiodateien unterstützt: MP3 und WAV
+
+Zur Zeit werden zudem folgende Sprachen nativ unterstützt: Bulgarisch (vielen Dank an meine Freundin), Englisch und Deutsch
+
+Bitte beachtet, dass dies in erster Linie ein Nebenprojekt ist und daher sicherlich noch einige Bugs und dergleichen vorhanden sind.
+Nutzt zum mitteilen von gefundenen Bugs oder für weitere Anregungen bitte die Github Issue Seite dieses Projektes.
+
+PS: Die Anwendung benötigt Java 8.
+
+Damit wünsche ich euch viel Spaß mit dem FXPlayer!
