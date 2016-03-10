@@ -4,6 +4,7 @@ import com.sun.javafx.collections.ObservableListWrapper;
 import de.victorfx.fxplayer.entity.MediaEntity;
 import de.victorfx.fxplayer.entity.PlaylistEntity;
 import javafx.animation.AnimationTimer;
+import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
 import javafx.fxml.FXML;
@@ -37,7 +38,7 @@ import java.util.ResourceBundle;
 
 /**
  * Created by Ramon Victor on 17.10.2015.
- *
+ * <p>
  * Controller for the fxplayer.xml.
  */
 public class FXPlayercontroller implements Initializable {
@@ -384,6 +385,14 @@ public class FXPlayercontroller implements Initializable {
         } else {
             playMediaAtIndex(getPlayingIndex() + 1);
         }
+    }
+
+    /**
+     * Closes the application.
+     */
+    @FXML
+    private void closeApplication() {
+        Platform.exit();
     }
 
     /**

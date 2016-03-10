@@ -146,7 +146,7 @@
                GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
                GridPane.rowIndex="5" GridPane.vgrow="NEVER"/>
         <TitledPane fx:id="titledPaneVisualizer" alignment="CENTER" contentDisplay="CENTER" expanded="false"
-                    text="Visualizer" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.columnSpan="2147483647"
+                    text="%visualizer" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.columnSpan="2147483647"
                     GridPane.rowIndex="10">
             <content>
                 <AreaChart fx:id="spektrum" alternativeRowFillVisible="false" animated="false" createSymbols="false"
@@ -172,20 +172,21 @@
         </TitledPane>
         <MenuBar GridPane.columnIndex="1" GridPane.rowSpan="2" GridPane.valignment="TOP">
             <menus>
-                <Menu mnemonicParsing="false" text="Menü">
+                <Menu mnemonicParsing="false" text="%menu">
                     <items>
                         <MenuItem mnemonicParsing="false" onAction="#openfile" text="%openFile"/>
+                        <MenuItem mnemonicParsing="false" onAction="#closeApplication" text="%exit"/>
                     </items>
                 </Menu>
             </menus>
         </MenuBar>
-        <Label text="FPS:" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Label text="%fps" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <GridPane.margin>
                 <Insets left="5.0"/>
             </GridPane.margin>
         </Label>
         <Label fx:id="fps" text="-" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
-        <TitledPane alignment="CENTER" disable="true" expanded="false" text="Video" textAlignment="CENTER"
+        <TitledPane alignment="CENTER" disable="true" expanded="false" text="%video" textAlignment="CENTER"
                     visible="false" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.hgrow="NEVER"
                     GridPane.rowIndex="11" GridPane.vgrow="NEVER">
             <font>
@@ -201,8 +202,8 @@
                         <RowConstraints minHeight="10.0" valignment="TOP"/>
                     </rowConstraints>
                     <children>
-                        <Button ellipsisString="Vollbild" mnemonicParsing="false" text="Vollbild" textAlignment="CENTER"
-                                GridPane.columnIndex="1"/>
+                        <Button ellipsisString="Vollbild" mnemonicParsing="false" text="%fullscreen"
+                                textAlignment="CENTER" GridPane.columnIndex="1"/>
                         <MediaView fx:id="videoView" fitHeight="400.0" nodeOrientation="INHERIT"
                                    GridPane.halignment="CENTER"/>
                     </children>
