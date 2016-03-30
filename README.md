@@ -1,4 +1,4 @@
-# FXPlayer 1.0
+# FXPlayer v1.0
 by Ramon Victor
 
 Willkommen auf der Github-Projektseite des FXPlayers!
