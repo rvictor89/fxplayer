@@ -21,9 +21,11 @@ import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.Duration;
+import org.controlsfx.glyphfont.Glyph;
 
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
@@ -86,6 +88,8 @@ public class FXPlayercontroller implements Initializable {
     private double volume;
     private ResourceBundle language;
     private XYChart.Data[] series1Data;
+    private Glyph glyphPause;
+    private Glyph glyphPlay;
 
     /**
      * Method for the "Play" button. Controls the mediaplayer and the "Play" button text.
@@ -94,13 +98,13 @@ public class FXPlayercontroller implements Initializable {
     private void play() {
         if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
             mediaplayer.play();
-            btnPlay.setText(language.getString("pause"));
+            btnPlay.setGraphic(glyphPause);
         } else if (mediaplayer.getStatus() == MediaPlayer.Status.PLAYING) {
             mediaplayer.pause();
-            btnPlay.setText(language.getString("resume"));
+            btnPlay.setGraphic(glyphPlay);
         } else if (mediaplayer.getStatus() == MediaPlayer.Status.STOPPED) {
             mediaplayer.play();
-            btnPlay.setText(language.getString("pause"));
+            btnPlay.setGraphic(glyphPause);
             btnStop.setDisable(false);
         }
     }
@@ -137,7 +141,7 @@ public class FXPlayercontroller implements Initializable {
             mediaplayer.seek(new Duration(0.0));
             mediaplayer.stop();
             btnStop.setDisable(true);
-            btnPlay.setText(language.getString("play"));
+            btnPlay.setGraphic(glyphPlay);
         }
     }
 
@@ -196,6 +200,7 @@ public class FXPlayercontroller implements Initializable {
         mediaplayer = new MediaPlayer(mediaEntity.getMedia());
         mediaplayer.setOnReady(new PreparationWorker());
         mediaplayer.setOnEndOfMedia(new EndOfFileRunner());
+        btnPlay.setGraphic(glyphPause);
     }
 
     /**
@@ -259,6 +264,10 @@ public class FXPlayercontroller implements Initializable {
     public void initialize(URL location, ResourceBundle resources) {
 
         language = resources;
+        glyphPause = new Glyph("FontAwesome", "pause");
+        glyphPause.setColor(Color.WHITE);
+        glyphPlay = new Glyph("FontAwesome", "play");
+        glyphPlay.setColor(Color.WHITE);
 
         XYChart.Series<String, Number> series1 = new XYChart.Series<>();
         series1Data = new XYChart.Data[BANDS + 2];
@@ -541,7 +550,7 @@ public class FXPlayercontroller implements Initializable {
             sliderTime.setDisable(false);
             mediaplayer.setVolume(volume);
             mediaplayer.setAutoPlay(true);
-            btnPlay.setText(language.getString("pause"));
+            btnPlay.setGraphic(glyphPause);
             btnPlay.setDisable(false);
             btnStop.setDisable(false);
             btnBefore.setDisable(false);

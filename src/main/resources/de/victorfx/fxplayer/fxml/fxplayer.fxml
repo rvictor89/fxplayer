@@ -9,9 +9,10 @@
 <?import javafx.scene.layout.*?>
 <?import javafx.scene.media.MediaView?>
 <?import javafx.scene.text.Font?>
+<?import org.controlsfx.glyphfont.*?>
 <GridPane xmlns:fx="http://javafx.com/fxml/1" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0"
           prefWidth="800.0"
-          styleClass="background" stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.40"
+          styleClass="background" stylesheets="@../css/fxplayer.css" xmlns="http://javafx.com/javafx/8.0.65"
           fx:controller="de.victorfx.fxplayer.controller.FXPlayercontroller">
     <columnConstraints>
         <ColumnConstraints/>
@@ -53,24 +54,23 @@
                 <Insets top="10.0"/>
             </GridPane.margin>
         </Slider>
-        <Label text="%title" GridPane.columnIndex="2">
+        <Label styleClass="label-default" text="%title" GridPane.columnIndex="2">
             <GridPane.margin>
                 <Insets left="10.0"/>
             </GridPane.margin>
         </Label>
-        <Label text="%artist" GridPane.columnIndex="2" GridPane.rowIndex="1">
+        <Label styleClass="label-default" text="%artist" GridPane.columnIndex="2" GridPane.rowIndex="1">
             <GridPane.margin>
                 <Insets left="10.0"/>
             </GridPane.margin>
         </Label>
-        <Label disable="true" rotate="-90.0" text="%volume" GridPane.columnIndex="5" GridPane.columnSpan="2147483647"
-               GridPane.rowSpan="5">
-            <GridPane.margin>
-                <Insets top="10.0"/>
-            </GridPane.margin>
+        <Label styleClass="label-default" GridPane.columnIndex="5" GridPane.halignment="CENTER" GridPane.rowSpan="5">
+            <graphic>
+                <Glyph fontFamily="FontAwesome" icon="volume_up" styleClass="glyph"/>
+            </graphic>
         </Label>
-        <Label fx:id="lblTitle" text="-" GridPane.columnIndex="3"/>
-        <Label fx:id="lblArtist" text="-" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
+        <Label fx:id="lblTitle" styleClass="label-default" text="-" GridPane.columnIndex="3"/>
+        <Label fx:id="lblArtist" styleClass="label-default" text="-" GridPane.columnIndex="3" GridPane.rowIndex="1"/>
         <Accordion GridPane.columnIndex="3" GridPane.rowIndex="7"/>
         <TableView fx:id="playlistList" onMouseClicked="#playlistClick" prefHeight="78.0" prefWidth="532.0"
                    styleClass="table-view" GridPane.columnIndex="1" GridPane.columnSpan="2147483647"
@@ -92,40 +92,81 @@
         <HBox alignment="CENTER_LEFT" nodeOrientation="RIGHT_TO_LEFT" prefHeight="100.0" prefWidth="200.0"
               GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.rowIndex="9">
             <children>
-                <Button mnemonicParsing="false" onAction="#dialogSavePlaylist" text="%saveList">
+                <Button mnemonicParsing="false" onAction="#dialogSavePlaylist">
+                    <tooltip>
+                        <Tooltip text="%saveList"/>
+                    </tooltip>
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="hdd_alt" styleClass="glyph"/>
+                    </graphic>
                     <HBox.margin>
                         <Insets left="1.0"/>
                     </HBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#dialogOpenPlaylist" text="%openList"/>
+                <Button mnemonicParsing="false" onAction="#dialogOpenPlaylist">
+                    <tooltip>
+                        <Tooltip text="%openList"/>
+                    </tooltip>
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="folder_open" styleClass="glyph"/>
+                    </graphic>
+                </Button>
                 <Separator orientation="VERTICAL" prefHeight="29.0" prefWidth="30.0"/>
-                <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#deleteFromList"
-                        text="%deleteFromList">
+                <Button alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" onAction="#deleteFromList">
+                    <tooltip>
+                        <Tooltip text="%deleteFromList"/>
+                    </tooltip>
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="minus" styleClass="glyph"/>
+                    </graphic>
                     <HBox.margin>
                         <Insets/>
                     </HBox.margin>
                 </Button>
-                <Button mnemonicParsing="false" onAction="#addToList" text="%addToListFiles"/>
+                <Button mnemonicParsing="false" onAction="#addToList">
+                    <tooltip>
+                        <Tooltip text="%addToListFiles"/>
+                    </tooltip>
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="plus" styleClass="glyph"/>
+                    </graphic>
+                </Button>
             </children>
         </HBox>
-        <Label text="%album" GridPane.columnIndex="2" GridPane.rowIndex="2">
+        <Label styleClass="label-default" text="%album" GridPane.columnIndex="2" GridPane.rowIndex="2">
             <GridPane.margin>
                 <Insets left="10.0"/>
             </GridPane.margin>
         </Label>
-        <Label fx:id="lblAlbum" text="-" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
+        <Label fx:id="lblAlbum" styleClass="label-default" text="-" GridPane.columnIndex="3" GridPane.rowIndex="2"/>
         <HBox prefHeight="100.0" prefWidth="200.0" GridPane.columnIndex="1" GridPane.columnSpan="3"
               GridPane.rowIndex="5">
             <children>
                 <Button fx:id="btnStop" disable="true" maxHeight="1.7976931348623157E308"
-                        maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#stop" text="%stop"/>
-                <Button fx:id="btnBefore" disable="true" mnemonicParsing="false" onAction="#playBeforeSong"
-                        text="&lt;"/>
+                        maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#stop">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="stop" styleClass="glyph"/>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnBefore" disable="true" mnemonicParsing="false" onAction="#playBeforeSong">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="step_backward" styleClass="glyph"/>
+                    </graphic>
+                </Button>
                 <Button fx:id="btnPlay" disable="true" maxHeight="1.7976931348623157E308"
-                        maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#play" text="%play"/>
-                <Button fx:id="btnNext" disable="true" mnemonicParsing="false" onAction="#playNextSong" text="&gt;"/>
+                        maxWidth="1.7976931348623157E308" mnemonicParsing="false" onAction="#play">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="play" styleClass="glyph"/>
+                    </graphic>
+                </Button>
+                <Button fx:id="btnNext" disable="true" mnemonicParsing="false" onAction="#playNextSong">
+                    <graphic>
+                        <Glyph fontFamily="FontAwesome" icon="step_forward" styleClass="glyph"/>
+                    </graphic>
+                </Button>
                 <Label fx:id="timelabel" alignment="CENTER" contentDisplay="CENTER" maxHeight="1.7976931348623157E308"
-                       maxWidth="1.7976931348623157E308" text="--:-- / --:--" HBox.hgrow="ALWAYS">
+                       maxWidth="1.7976931348623157E308" styleClass="label-default" text="--:-- / --:--"
+                       HBox.hgrow="ALWAYS">
                     <font>
                         <Font size="14.0"/>
                     </font>
@@ -142,12 +183,15 @@
                 <Insets bottom="10.0"/>
             </padding>
         </Separator>
-        <Label fx:id="lblVolume" alignment="CENTER" contentDisplay="CENTER" text="- %" GridPane.columnIndex="5"
-               GridPane.columnSpan="2147483647" GridPane.halignment="CENTER" GridPane.hgrow="ALWAYS"
-               GridPane.rowIndex="5" GridPane.vgrow="NEVER"/>
-        <TitledPane fx:id="titledPaneVisualizer" alignment="CENTER" contentDisplay="CENTER" expanded="false"
+        <Label fx:id="lblVolume" alignment="CENTER" contentDisplay="CENTER" styleClass="label-default" text="- %"
+               GridPane.columnIndex="5" GridPane.columnSpan="2147483647" GridPane.halignment="CENTER"
+               GridPane.hgrow="ALWAYS" GridPane.rowIndex="5" GridPane.vgrow="NEVER"/>
+        <TitledPane fx:id="titledPaneVisualizer" alignment="CENTER" contentDisplay="RIGHT" expanded="false"
                     text="%visualizer" textAlignment="CENTER" GridPane.columnIndex="1" GridPane.columnSpan="2147483647"
                     GridPane.rowIndex="10">
+            <graphic>
+                <Glyph fontFamily="FontAwesome" icon="area_chart"/>
+            </graphic>
             <content>
                 <AreaChart fx:id="spektrum" alternativeRowFillVisible="false" animated="false" createSymbols="false"
                            horizontalGridLinesVisible="false" horizontalZeroLineVisible="false" legendVisible="false"
@@ -180,12 +224,13 @@
                 </Menu>
             </menus>
         </MenuBar>
-        <Label text="%fps" GridPane.columnIndex="1" GridPane.rowIndex="2">
+        <Label styleClass="label-default" text="%fps" GridPane.columnIndex="1" GridPane.rowIndex="2">
             <GridPane.margin>
                 <Insets left="5.0"/>
             </GridPane.margin>
         </Label>
-        <Label fx:id="fps" text="-" GridPane.columnIndex="1" GridPane.halignment="RIGHT" GridPane.rowIndex="2"/>
+        <Label fx:id="fps" styleClass="label-default" text="-" GridPane.columnIndex="1" GridPane.halignment="RIGHT"
+               GridPane.rowIndex="2"/>
         <TitledPane alignment="CENTER" disable="true" expanded="false" text="%video" textAlignment="CENTER"
                     visible="false" GridPane.columnIndex="1" GridPane.columnSpan="2147483647" GridPane.hgrow="NEVER"
                     GridPane.rowIndex="11" GridPane.vgrow="NEVER">

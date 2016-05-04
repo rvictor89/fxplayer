@@ -10,7 +10,11 @@
     -fx-background-color: #1d1d1d;
 }
 
-.label {
+.glyph {
+    -fx-text-fill: white;
+}
+
+.label-default {
     -fx-font-size: 11pt;
     -fx-font-family: "Segoe UI Semibold";
     -fx-text-fill: white;
@@ -77,11 +81,11 @@
 }
 
 .default-color0.chart-series-area-line {
-    -fx-stroke: -fx-focus-color;
+    -fx-stroke: transparent;
 }
 
 .default-color0.chart-series-area-fill {
-    -fx-fill: -fx-focus-color;
+    -fx-fill: linear-gradient(to bottom, -fx-focus-color 75%, white);
 }
 
 .titled-pane > *.content
