@@ -1,5 +1,6 @@
 package de.victorfx.fxplayer.entity;
 
+import de.victorfx.fxplayer.model.MediaEntity;
 import org.junit.Test;
 
 import java.io.File;

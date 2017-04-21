@@ -1,5 +1,7 @@
 package de.victorfx.fxplayer.entity;
 
+import de.victorfx.fxplayer.model.MediaEntity;
+import de.victorfx.fxplayer.model.PlaylistEntity;
 import org.junit.Test;
 
 import java.util.ArrayList;

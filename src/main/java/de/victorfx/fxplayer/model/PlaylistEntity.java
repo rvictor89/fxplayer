@@ -1,4 +1,4 @@
-package de.victorfx.fxplayer.entity;
+package de.victorfx.fxplayer.model;
 
 import javax.xml.bind.annotation.XmlRootElement;
 import java.util.List;

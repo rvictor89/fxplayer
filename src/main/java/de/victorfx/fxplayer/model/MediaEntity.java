@@ -1,4 +1,4 @@
-package de.victorfx.fxplayer.entity;
+package de.victorfx.fxplayer.model;
 
 import javafx.scene.media.Media;
 import javafx.util.Duration;

@@ -1,12 +1,16 @@
 package de.victorfx.fxplayer.controller;
 
 import com.sun.javafx.collections.ObservableListWrapper;
-import de.victorfx.fxplayer.entity.MediaEntity;
-import de.victorfx.fxplayer.entity.PlaylistEntity;
+import de.jensd.fx.glyphs.GlyphsDude;
+import de.jensd.fx.glyphs.fontawesome.FontAwesomeIcon;
+import de.victorfx.fxplayer.model.MediaEntity;
+import de.victorfx.fxplayer.model.PlaylistEntity;
 import javafx.animation.AnimationTimer;
 import javafx.application.Platform;
 import javafx.beans.InvalidationListener;
 import javafx.beans.Observable;
+import javafx.beans.binding.NumberBinding;
+import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.fxml.Initializable;
 import javafx.scene.chart.AreaChart;
@@ -21,6 +25,8 @@ import javafx.scene.media.AudioSpectrumListener;
 import javafx.scene.media.Media;
 import javafx.scene.media.MediaPlayer;
 import javafx.scene.media.MediaView;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
 import javafx.util.Callback;
 import javafx.util.Duration;
@@ -44,10 +50,13 @@ import java.util.ResourceBundle;
 public class FXPlayercontroller implements Initializable {
 
     private static final int BANDS = 32;
-    private static final double INTERVAL = 0.015;
+    private static final double INTERVAL = 0.005;
     private static final double DROPDOWN = 0.25;
     private static final int DOUBLECLICKTIME = 500;
     private final DataFormat dataFormat = new DataFormat("MediaEntity");
+    @FXML private ProgressBar volumeBar;
+    @FXML private ProgressBar barTime;
+    @FXML private Label lblVolumeIcon;
     @FXML private TitledPane titledPaneVisualizer;
     @FXML private Label fps;
     @FXML private MediaView videoView;
@@ -86,6 +95,27 @@ public class FXPlayercontroller implements Initializable {
     private double volume;
     private ResourceBundle language;
     private XYChart.Data[] series1Data;
+    private final Text icon_play;
+    private final Text icon_stop;
+    private final Text icon_before;
+    private final Text icon_next;
+    private final Text icon_pause;
+    private final Text icon_volume;
+
+    public FXPlayercontroller() {
+        icon_play = GlyphsDude.createIcon(FontAwesomeIcon.PLAY);
+        icon_play.setFill(Color.WHITE);
+        icon_stop = GlyphsDude.createIcon(FontAwesomeIcon.STOP);
+        icon_stop.setFill(Color.WHITE);
+        icon_before = GlyphsDude.createIcon(FontAwesomeIcon.ARROW_LEFT);
+        icon_before.setFill(Color.WHITE);
+        icon_next = GlyphsDude.createIcon(FontAwesomeIcon.ARROW_RIGHT);
+        icon_next.setFill(Color.WHITE);
+        icon_pause = GlyphsDude.createIcon(FontAwesomeIcon.PAUSE);
+        icon_pause.setFill(Color.WHITE);
+        icon_volume = GlyphsDude.createIcon(FontAwesomeIcon.VOLUME_OFF, "30");
+        icon_volume.setFill(Color.WHITE);
+    }
 
     /**
      * Method for the "Play" button. Controls the mediaplayer and the "Play" button text.
@@ -94,13 +124,13 @@ public class FXPlayercontroller implements Initializable {
     private void play() {
         if (mediaplayer.getStatus() == MediaPlayer.Status.PAUSED) {
             mediaplayer.play();
-            btnPlay.setText(language.getString("pause"));
+            btnPlay.setGraphic(icon_pause);
         } else if (mediaplayer.getStatus() == MediaPlayer.Status.PLAYING) {
             mediaplayer.pause();
-            btnPlay.setText(language.getString("resume"));
+            btnPlay.setGraphic(icon_play);
         } else if (mediaplayer.getStatus() == MediaPlayer.Status.STOPPED) {
             mediaplayer.play();
-            btnPlay.setText(language.getString("pause"));
+            btnPlay.setGraphic(icon_pause);
             btnStop.setDisable(false);
         }
     }
@@ -137,7 +167,7 @@ public class FXPlayercontroller implements Initializable {
             mediaplayer.seek(new Duration(0.0));
             mediaplayer.stop();
             btnStop.setDisable(true);
-            btnPlay.setText(language.getString("play"));
+            btnPlay.setGraphic(icon_play);
         }
     }
 
@@ -160,7 +190,8 @@ public class FXPlayercontroller implements Initializable {
         int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
         minutesDuration = (int) mediaplayer.getTotalDuration().toMinutes() % 60;
         secondsDuration = (int) mediaplayer.getTotalDuration().toSeconds() % 60;
-        timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration, secondsDuration));
+        Platform.runLater(() -> timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds,
+                minutesDuration, secondsDuration)));
     }
 
     /**
@@ -206,14 +237,7 @@ public class FXPlayercontroller implements Initializable {
         int index = playlistList.getSelectionModel().getSelectedIndex();
         playlistList.getSelectionModel().select(0);
         playlistList.getItems().remove(index);
-        try {
-            playlistEntity = new PlaylistEntity();
-            playlistEntity.setMediaEntityList(playlistList.getItems());
-            playlistSaveFile = new File("unsavedPlaylist.fxp");
-            savePlaylist();
-        } catch (JAXBException e) {
-            e.printStackTrace();
-        }
+        generateAndSavePlaylist();
     }
 
     /**
@@ -257,6 +281,14 @@ public class FXPlayercontroller implements Initializable {
      */
     @Override
     public void initialize(URL location, ResourceBundle resources) {
+
+        btnPlay.setGraphic(icon_play);
+        btnBefore.setGraphic(icon_before);
+        btnNext.setGraphic(icon_next);
+        btnStop.setGraphic(icon_stop);
+        lblVolumeIcon.setGraphic(icon_volume);
+        barTime.progressProperty().setValue(0);
+        volumeBar.progressProperty().bind(sliderVolume.valueProperty());
 
         language = resources;
 
@@ -344,22 +376,33 @@ public class FXPlayercontroller implements Initializable {
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("MP3", "*.mp3"));
         fc.getExtensionFilters().add(new FileChooser.ExtensionFilter("WAV", "*.wav"));
         List<File> file = fc.showOpenMultipleDialog(null);
-        if (file != null && file.size() != 0) {
-            for (File tmpFile : file) {
-                String songpath = tmpFile.getAbsolutePath().replace("\\", "/");
-                media = new Media(new File(songpath).toURI().toString());
-                mediaEntity = new MediaEntity(media.getSource());
-                playlistList.getItems().add(mediaEntity);
-                generateMediaMetadata(mediaEntity);
+        Task task = new Task<Void>() {
+            @Override
+            protected Void call() throws Exception {
+                if (file != null && file.size() != 0) {
+                    for (File tmpFile : file) {
+                        String songpath = tmpFile.getAbsolutePath().replace("\\", "/");
+                        media = new Media(new File(songpath).toURI().toString());
+                        mediaEntity = new MediaEntity(media.getSource());
+                        playlistList.getItems().add(mediaEntity);
+                        generateMediaMetadata(mediaEntity);
+                    }
+                    generateAndSavePlaylist();
+                }
+                return null;
             }
-            try {
-                playlistEntity = new PlaylistEntity();
-                playlistEntity.setMediaEntityList(playlistList.getItems());
-                playlistSaveFile = new File("unsavedPlaylist.fxp");
-                savePlaylist();
-            } catch (JAXBException e) {
-                e.printStackTrace();
-            }
+        };
+        new Thread(task).run();
+    }
+
+    private void generateAndSavePlaylist() {
+        try {
+            playlistEntity = new PlaylistEntity();
+            playlistEntity.setMediaEntityList(playlistList.getItems());
+            playlistSaveFile = new File("unsavedPlaylist.fxp");
+            savePlaylist();
+        } catch (JAXBException e) {
+            e.printStackTrace();
         }
     }
 
@@ -448,9 +491,11 @@ public class FXPlayercontroller implements Initializable {
             if (!isSliderPressed) {
                 int minutes = (int) mediaplayer.getCurrentTime().toMinutes() % 60;
                 int seconds = (int) mediaplayer.getCurrentTime().toSeconds() % 60;
-                timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration,
-                        secondsDuration));
-                sliderTime.setValue(mediaplayer.getCurrentTime().toSeconds());
+                Platform.runLater(() -> {
+                    timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration,
+                            secondsDuration));
+                    sliderTime.setValue(mediaplayer.getCurrentTime().toSeconds());
+                });
             }
         }
     }
@@ -462,7 +507,7 @@ public class FXPlayercontroller implements Initializable {
         public void invalidated(Observable observable) {
             if (sliderVolume.isPressed()) {
                 volume = sliderVolume.getValue();
-                lblVolume.setText(String.format("%01d %%", (int) (volume * 100)));
+                Platform.runLater(() -> lblVolume.setText(String.format("%01d %%", (int) (volume * 100))));
                 if (mediaplayer != null) {
                     mediaplayer.setVolume(volume);
                 }
@@ -476,10 +521,12 @@ public class FXPlayercontroller implements Initializable {
     private class TimeSliderListener implements InvalidationListener {
         public void invalidated(Observable observable) {
             if (isSliderPressed) {
-                int minutes = (int) sliderTime.getValue() / 60;
-                int seconds = (int) sliderTime.getValue() % 60;
-                timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration,
-                        secondsDuration));
+                Platform.runLater(() -> {
+                    int minutes = (int) sliderTime.getValue() / 60;
+                    int seconds = (int) sliderTime.getValue() % 60;
+                    timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration,
+                            secondsDuration));
+                });
             }
         }
     }
@@ -511,6 +558,8 @@ public class FXPlayercontroller implements Initializable {
             timelabel.setText(String.format("%02d:%02d / %02d:%02d", minutes, seconds, minutesDuration,
                     secondsDuration));
             sliderTime.setMax(mediaplayer.getTotalDuration().toSeconds());
+            NumberBinding numberBinding = sliderTime.valueProperty().divide(mediaplayer.getTotalDuration().toSeconds());
+            barTime.progressProperty().bind(numberBinding);
 
             mediaplayer.currentTimeProperty().addListener(new TimelabelListener());
             mediaplayer.setAudioSpectrumListener(new SpektrumListener());
@@ -529,19 +578,12 @@ public class FXPlayercontroller implements Initializable {
             playlistList.getItems().set(getPlayingIndex(), mediaEntity);
             playlistList.refresh();
 
-            try {
-                playlistEntity = new PlaylistEntity();
-                playlistEntity.setMediaEntityList(playlistList.getItems());
-                playlistSaveFile = new File("unsavedPlaylist.fxp");
-                savePlaylist();
-            } catch (JAXBException e) {
-                e.printStackTrace();
-            }
+            generateAndSavePlaylist();
 
             sliderTime.setDisable(false);
             mediaplayer.setVolume(volume);
             mediaplayer.setAutoPlay(true);
-            btnPlay.setText(language.getString("pause"));
+            btnPlay.setGraphic(icon_pause);
             btnPlay.setDisable(false);
             btnStop.setDisable(false);
             btnBefore.setDisable(false);
@@ -587,14 +629,7 @@ public class FXPlayercontroller implements Initializable {
                 int indexOfMediaInPlaylist = getIndexOfMediaInPlaylist(mediaEntity);
                 playlistList.getItems().set(indexOfMediaInPlaylist, mediaEntity);
 
-                try {
-                    playlistEntity = new PlaylistEntity();
-                    playlistEntity.setMediaEntityList(playlistList.getItems());
-                    playlistSaveFile = new File("unsavedPlaylist.fxp");
-                    savePlaylist();
-                } catch (JAXBException e) {
-                    e.printStackTrace();
-                }
+                generateAndSavePlaylist();
             }
 
         }
@@ -639,14 +674,7 @@ public class FXPlayercontroller implements Initializable {
 
             row.setOnDragDone(event -> {
                 playlistList.getSelectionModel().select(dropIndex);
-                try {
-                    playlistEntity = new PlaylistEntity();
-                    playlistEntity.setMediaEntityList(playlistList.getItems());
-                    playlistSaveFile = new File("unsavedPlaylist.fxp");
-                    savePlaylist();
-                } catch (JAXBException e) {
-                    e.printStackTrace();
-                }
+                generateAndSavePlaylist();
             });
 
             row.setOnDragDropped(event -> {
@@ -676,21 +704,23 @@ public class FXPlayercontroller implements Initializable {
 
         @Override
         public void spectrumDataUpdate(double timestamp, double duration, float[] magnitudes, float[] phases) {
-            //noinspection unchecked
-            series1Data[0].setYValue(0);
-            //noinspection unchecked
-            series1Data[BANDS + 1].setYValue(0);
-            for (int i = 0; i < magnitudes.length; i++) {
-                if (magnitudes[i] >= buffer[i]) {
-                    buffer[i] = magnitudes[i];
-                    //noinspection unchecked
-                    series1Data[i + 1].setYValue(magnitudes[i] - mediaplayer.getAudioSpectrumThreshold());
-                } else {
-                    //noinspection unchecked
-                    series1Data[i + 1].setYValue(buffer[i] - mediaplayer.getAudioSpectrumThreshold());
-                    buffer[i] -= DROPDOWN;
+            Platform.runLater(() -> {
+                //noinspection unchecked
+                series1Data[0].setYValue(0);
+                //noinspection unchecked
+                series1Data[BANDS + 1].setYValue(0);
+                for (int i = 0; i < magnitudes.length; i++) {
+                    if (magnitudes[i] >= buffer[i]) {
+                        buffer[i] = magnitudes[i];
+                        //noinspection unchecked
+                        series1Data[i + 1].setYValue(magnitudes[i] - mediaplayer.getAudioSpectrumThreshold());
+                    } else {
+                        //noinspection unchecked
+                        series1Data[i + 1].setYValue(buffer[i] - mediaplayer.getAudioSpectrumThreshold());
+                        buffer[i] -= DROPDOWN;
+                    }
                 }
-            }
+            });
         }
     }
 
@@ -709,7 +739,7 @@ public class FXPlayercontroller implements Initializable {
             long tmpElapsedTime = now - tmpTime;
             currentFramerate = 1_000_000_000 / elapsedTime;
             if (tmpElapsedTime >= 1_000_000_000) {
-                fps.setText(String.valueOf(currentFramerate));
+                Platform.runLater(() -> fps.setText(String.valueOf(currentFramerate)));
                 tmpTime = now;
             }
             if (titledPaneVisualizer.isExpanded() && mediaplayer != null) {

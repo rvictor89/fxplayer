@@ -1,4 +1,4 @@
-# FXPlayer v1.0
+# FXPlayer v1.1
 by Ramon Victor
 
 Willkommen auf der Github-Projektseite des FXPlayers!
@@ -8,7 +8,7 @@ Des Weiteren kann bei Bedarf eine Audio-Visualisierung dazu geschaltet werden.
 
 Es werden folgende Audiodateien unterstützt: MP3 und WAV
 
-Zur Zeit werden zudem folgende Sprachen nativ unterstützt: Bulgarisch (vielen Dank an meine Freundin), Englisch und Deutsch
+Zur Zeit werden zudem folgende Sprachen nativ unterstützt: Englisch und Deutsch
 
 Bitte beachtet, dass dies in erster Linie ein Nebenprojekt ist und daher sicherlich noch einige Bugs und dergleichen vorhanden sind.
 Nutzt zum mitteilen von gefundenen Bugs oder für weitere Anregungen bitte die Github Issue Seite dieses Projektes.

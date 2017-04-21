@@ -178,3 +178,19 @@
 .button:default:hover {
     -fx-background-color: derive(-fx-focus-color,30%);
 }
+
+.slider .thumb {
+    -fx-background-color: -fx-focus-color;
+}
+
+.slider .track {
+    -fx-background-color: transparent;
+}
+
+.progress-bar .track {
+    -fx-background-insets: 1px;
+}
+
+.progress-bar .bar {
+    -fx-background-color: derive(-fx-focus-color,-30%);
+}
