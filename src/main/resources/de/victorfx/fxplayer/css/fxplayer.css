@@ -64,7 +64,7 @@
     -fx-opacity: 1;
 }
 
-.table-view:focused .table-row-cell:filled:focused:selected {
+.table-view:focused .table-row-cell:filled:selected {
     -fx-background-color: -fx-focus-color;
 }
 

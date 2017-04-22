@@ -580,6 +580,8 @@ public class FXPlayercontroller implements Initializable {
 
             generateAndSavePlaylist();
 
+            playlistList.getFocusModel().focus(getPlayingIndex());
+
             sliderTime.setDisable(false);
             mediaplayer.setVolume(volume);
             mediaplayer.setAutoPlay(true);
@@ -648,6 +650,8 @@ public class FXPlayercontroller implements Initializable {
                     if (item != null) {
                         if (item.isPlaying()) {
                             getStyleClass().add("media-playing");
+                        } else {
+                            getStyleClass().remove("media-playing");
                         }
                     }
                     super.updateItem(item, empty);
